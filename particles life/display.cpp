@@ -24,7 +24,7 @@ void display(sf::Vector2f& sizeEnv) { // les données à affichées sont passées pa
 	window.clear(sf::Color(255, 135, 135));
 	
 	sf::RectangleShape map;
-	map.setSize(mult(sizeEnv, ));
+	map.setSize(mult(sizeEnv, zoom));
 	map.setFillColor(sf::Color::White);
 	map.setPosition(camPos);
 
