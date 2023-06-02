@@ -8,6 +8,8 @@ float zoom = 1.0f; // size of the map
 sf::Vector2f camPos = sf::Vector2f(0.0f, 0.0f);
 
 
+
+
 void initDisplay() {
 	windowWidth = 1850;
 	windowHeight = 1000;
@@ -22,7 +24,7 @@ void display(sf::Vector2f& sizeEnv) { // les données à affichées sont passées pa
 	window.clear(sf::Color(255, 135, 135));
 	
 	sf::RectangleShape map;
-	map.setSize(sizeEnv);
+	map.setSize(mult(sizeEnv, ));
 	map.setFillColor(sf::Color::White);
 	map.setPosition(camPos);
 
