@@ -2,9 +2,11 @@
 #include "moteur.h"
 
 int main() {
+	initMoteur():
 	initDisplay();
 
 	while (true) {
+		update();
 		display();
 	}
 
