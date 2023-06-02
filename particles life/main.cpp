@@ -2,7 +2,7 @@
 #include "moteur.h"
 
 int main() {
-	initMoteur():
+	initMoteur();
 	initDisplay();
 
 	while (true) {
