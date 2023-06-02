@@ -10,17 +10,17 @@ sf::Vector2f camPos = sf::Vector2f(0.0f, 0.0f);
 
 
 
-void initDisplay() {
+void initDisplay(const sf::Vector2f& sizeEnv) {
 	windowWidth = 1850;
 	windowHeight = 1000;
 	window.setSize(sf::Vector2u(windowWidth, windowHeight));
 	zoom = 1.0f;
-	camPos = sf::Vector2f(0.0f, 0.0f);
+	camPos = mult(sizeEnv, -0.5f);
 }
 
 
 
-void display(sf::Vector2f& sizeEnv) { // les données à affichées sont passées par référence en paramètre dans cette fonction depuis le main 
+void display(const sf::Vector2f& sizeEnv) { // les données à affichées sont passées par référence en paramètre dans cette fonction depuis le main 
 	window.clear(sf::Color(255, 135, 135));
 	
 	sf::RectangleShape map;

@@ -9,7 +9,7 @@ extern float zoom;
 extern sf::Vector2f camPos;
 
 
-void initDisplay();
+void initDisplay(const sf::Vector2f& sizeEnv);
 
-void display(sf::Vector2f& sizeEnv);
+void display(const sf::Vector2f& sizeEnv);
 

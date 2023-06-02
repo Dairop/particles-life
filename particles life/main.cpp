@@ -7,7 +7,7 @@ extern sf::Vector2f SIZE_ENV;
 
 int main() {
 	initMoteur();
-	initDisplay();
+	initDisplay(SIZE_ENV);
 
 	while (true) {
 		updateEvents();
