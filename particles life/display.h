@@ -5,7 +5,7 @@
 extern unsigned int windowWidth;
 extern unsigned int windowHeight;
 extern sf::RenderWindow window;
-extern float zoom; // size of the map
+extern float zoom;
 extern sf::Vector2f camPos;
 
 

@@ -4,7 +4,7 @@
 unsigned int windowWidth = 1850;
 unsigned int windowHeight = 1000;
 sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Particles life", sf::Style::Default);
-float zoom = 1.0f; // size of the map
+float zoom = 1.0f;
 sf::Vector2f camPos = sf::Vector2f(0.0f, 0.0f);
 
 
@@ -14,7 +14,7 @@ void initDisplay() {
 	windowWidth = 1850;
 	windowHeight = 1000;
 	window.setSize(sf::Vector2u(windowWidth, windowHeight));
-	zoom = 1.0f; // size of the map
+	zoom = 1.0f;
 	camPos = sf::Vector2f(0.0f, 0.0f);
 }
 
