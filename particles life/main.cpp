@@ -1,4 +1,5 @@
 #include "display.h"
+#include "moteur.h"
 
 int main() {
 	initDisplay();
