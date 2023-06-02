@@ -22,10 +22,10 @@ void updateEvents() {
 
 
 		else if (event.type == sf::Event::KeyPressed) {
-			if (event.key.code == sf::Keyboard::Up)	camPos.y -= 20 / zoom;
-			if (event.key.code == sf::Keyboard::Down) camPos.y += 20 / zoom;
-			if (event.key.code == sf::Keyboard::Left) camPos.x -= 20 / zoom;
-			if (event.key.code == sf::Keyboard::Right) camPos.x += 20 / zoom;
+			if (event.key.code == sf::Keyboard::Up)	camPos.y += 20 / zoom;
+			if (event.key.code == sf::Keyboard::Down) camPos.y -= 20 / zoom;
+			if (event.key.code == sf::Keyboard::Left) camPos.x += 20 / zoom;
+			if (event.key.code == sf::Keyboard::Right) camPos.x -= 20 / zoom;
 		}
 
 		else if (event.type == sf::Event::MouseButtonPressed) {
