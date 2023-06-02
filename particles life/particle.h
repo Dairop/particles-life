@@ -1,0 +1,58 @@
+#pragma once
+#include "utils.h"
+
+
+class type_particle;
+
+class type_particle {
+protected:
+	unsigned int id;
+	sf::Color color;
+	std::array<float, 5> globalValues = {0.0f,0.0f,0.0f,0.0f,0.0f}; // values between -1 and 1
+	std::string globalFunction = "";
+
+public:
+	type_particle() {
+		id = rand() % RAND_MAX;
+		globalValues = {randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP()};
+		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 1.0f, 1.0f);
+		color = sf::Color(_c.x, _c.y, _c.z);
+
+		//generate the function
+	}
+
+	//returns the norm of the force vector
+	float interactWith(type_particle& t2, float distance);
+	sf::Color getColor() const { return color; }
+
+};
+
+
+
+
+
+
+class particle
+{
+protected:	
+	sf::Vector2f position;
+	sf::Vector2f speed;
+	type_particle* type;
+
+public:
+	particle(type_particle* _type): type(_type) {
+		speed = sf::Vector2f(randFloatNP(), randFloatNP());
+	}
+	particle(sf::Vector2f mapSize, type_particle* _type) : type(_type) {
+		speed = sf::Vector2f(randFloatNP(), randFloatNP());
+		position = sf::Vector2f(randFloat() * mapSize.x, randFloat() * mapSize.y);
+	}
+
+	type_particle* getType() const { return type; }
+
+	sf::Vector2f getPosition() const { return position; }
+	sf::Color getColor() const { return type->getColor(); }
+	void interactWith(type_particle& t2, float distance);
+	void update(sf::Vector2f mapSize);
+};
+

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <array>
 #include <time.h>
 
 
@@ -25,6 +26,13 @@ sf::Vector3f mult(const sf::Vector3f a, const float le);
 float dist(const sf::Vector2f p1, const sf::Vector2f p2);
 float dist2(const sf::Vector2f p1, const sf::Vector2f p2);
 
+// random float between 0 and 1
+float randFloat(); 
+// random float between -1 and 1
+float randFloatNP(); 
+
+
+void collideCircles(sf::Vector2f& pos1, sf::Vector2f& pos2, float radius1, float radius2, float d2);
 
 
 sf::Vector3f HSVtoRGB(float H, float S, float V); // h:0-360.0, s:0.0-1.0, v:0.0-1.0

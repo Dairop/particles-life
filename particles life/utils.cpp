@@ -56,6 +56,28 @@ float dist(const sf::Vector2f p1, const sf::Vector2f p2) {
 }
 
 
+float randFloat() { return ((float) rand()) / RAND_MAX; } 
+float randFloatNP() { return ((float)rand()) / RAND_MAX * 2.0f - 1.0f; }
+
+
+
+void collideCircles(sf::Vector2f& pos1, sf::Vector2f& pos2, float radius1, float radius2, float d2) {
+    //resolvev the superposition
+    double angle = atan2(pos2.y - pos1.y, pos2.x - pos1.x);
+
+    float distanceBetweenCircles = sqrt(d2);
+
+    float distanceToMove = radius1 + radius2 - distanceBetweenCircles;
+
+    //u^date positions
+    pos1.x += cos(angle + 3.141592) * distanceToMove / 2;
+    pos1.y += sin(angle + 3.141592) * distanceToMove / 2;
+
+    pos2.x += cos(angle) * distanceToMove / 2;
+    pos2.y += sin(angle) * distanceToMove / 2;
+}
+
+
 
 sf::Vector3f HSVtoRGB(float H, float S, float V) {   // h:0-360.0, s:0.0-1.0, v:0.0-1.0
     S *= 100; V *= 100;

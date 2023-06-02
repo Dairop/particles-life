@@ -148,13 +148,15 @@
     <ClCompile Include="display.cpp" />
     <ClCompile Include="events.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="moteur.cpp" />
+    <ClCompile Include="engine.cpp" />
+    <ClCompile Include="particle.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="display.h" />
     <ClInclude Include="events.h" />
-    <ClInclude Include="moteur.h" />
+    <ClInclude Include="engine.h" />
+    <ClInclude Include="particle.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

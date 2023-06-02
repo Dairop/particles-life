@@ -1,6 +1,10 @@
 #pragma once
 #include "utils.h"
+#include "particle.h"
 
-void initMoteur();
+
+void initEngine();
 
 void update(); //calcul d'une nouvelle itération
+
+
