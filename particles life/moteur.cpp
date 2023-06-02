@@ -2,7 +2,7 @@
 
 
 
-sf::Vector2f SIZE = sf::Vector2f(1500, 850); //Taille environnement 
+sf::Vector2f SIZE_ENV = sf::Vector2f(1000, 650); //Taille environnement 
 
 
 void initMoteur(){

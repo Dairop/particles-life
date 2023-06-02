@@ -11,5 +11,5 @@ extern sf::Vector2f camPos;
 
 void initDisplay();
 
-void display();
+void display(sf::Vector2f& sizeEnv);
 
