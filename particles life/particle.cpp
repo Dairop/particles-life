@@ -16,17 +16,21 @@ void particle::interactWith(sf::Vector2f pos2, type_particle& t2, float distance
 	this->speed = add(this->speed, mult(direction, this->type->interactWith(t2, distance)));
 }
 
-void particle::update(sf::Vector2f mapSize) {
+void particle::update(sf::Vector2f mapSize, unsigned int type_env) {
 	this->position = add(this->position, this->speed);
 
-	//border collisions
-	//this->position.x = std::fmax(0.0f, std::fmin(this->position.x, mapSize.x));
-	//this->position.y = std::fmax(0.0f, std::fmin(this->position.y, mapSize.y));
-
-	//thorus space, we add mapSize because the fmodf function can't work with negative numbers
-	this->position.x = std::fmodf(this->position.x+mapSize.x, mapSize.x);
-	this->position.y = std::fmodf(this->position.y+mapSize.y, mapSize.y);
-		
-
 	this->speed = mult(this->speed, 0.90f);
+
+	if (type_env == 0) {
+		//rectangle & collisions
+		this->position.x = std::fmax(0, std::fmin(mapSize.x, this->position.x));
+		this->position.y = std::fmax(0, std::fmin(mapSize.y, this->position.y));
+	}
+	else if (type_env == 1) {
+		//thorus space, we add mapSize because the fmodf function can't work with negative numbers
+		this->position.x = std::fmodf(this->position.x + mapSize.x, mapSize.x);
+		this->position.y = std::fmodf(this->position.y + mapSize.y, mapSize.y);
+	}
+
+	const float MAX_SPEED = 15;
 }

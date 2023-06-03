@@ -54,6 +54,20 @@ float dist(const sf::Vector2f p1, const sf::Vector2f p2) {
 }
 
 
+float distOnThorus(const sf::Vector2f envSize, const sf::Vector2f p1, const sf::Vector2f p2) {
+    float dx = std::abs(p2.x - p1.x);
+    float dy = std::abs(p2.y - p1.y);
+ 
+    if (dx > envSize.x / 2.0f)
+        dx = envSize.x - dx;
+ 
+    if (dy > envSize.y / 2.0f)
+        dy = envSize.y - dy;
+ 
+    return std::sqrt(dx*dx + dy*dy);
+}
+
+
 float randFloat() { return ((float) rand()) / RAND_MAX; } 
 float randFloatNP() { return ((float)rand()) / RAND_MAX * 2.0f - 1.0f; }
 
