@@ -2,7 +2,7 @@
 
 
 float type_particle::interactWith(type_particle &t2, float distance) {
-	if (distance < 30.0f) return -1.0f; // collisions
+	if (distance < 30.0f) return -5.0f; // collisions
 	float force = 0.15f * (std::sin(t2.globalValues[0] * distance * 0.01f + this->globalValues[3]));
 	if (distance > 130.0f) { //less effective when too far
 		force /= distance/130.0f;
@@ -17,12 +17,25 @@ void particle::interactWith(sf::Vector2f pos2, type_particle& t2, float distance
 }
 
 void particle::update(sf::Vector2f mapSize, unsigned int type_env) {
-	this->position = add(this->position, this->speed);
+	this->position = add(this->position, mult(this->speed, 0.1 /*mass*/));
 
-	this->speed = mult(this->speed, 0.90f);
+	//resistance
+	float k = -6 * 3.14159 * 0.0091 /*fluid's viscosity*/ * 0.0015 /*particle's radius*/;
+	float d = dist(sf::Vector2f(0, 0), this->speed);
+	sf::Vector2f fluid_resistance = mult(mult(this->speed, 1 / (d + 0.0001)), k * d*d);
+	//std::cout << fluid_resistance.x << " " << fluid_resistance.y << "    ";
+	this->speed = add(this->speed, fluid_resistance);
+
 
 	if (type_env == 0) {
 		//rectangle & collisions
+		
+		this->speed.x = (this->position.x < 0) ? std::fabs(this->speed.x): this->speed.x;
+		this->speed.x = (this->position.x > mapSize.x) ? -std::fabs(this->speed.x) : this->speed.x;
+		this->speed.y = (this->position.y < 0) ? std::fabs(this->speed.y) : this->speed.y;
+		this->speed.y = (this->position.y > mapSize.y) ? -std::fabs(this->speed.y) : this->speed.y;
+		
+
 		this->position.x = std::fmax(0, std::fmin(mapSize.x, this->position.x));
 		this->position.y = std::fmax(0, std::fmin(mapSize.y, this->position.y));
 	}
@@ -31,6 +44,4 @@ void particle::update(sf::Vector2f mapSize, unsigned int type_env) {
 		this->position.x = std::fmodf(this->position.x + mapSize.x, mapSize.x);
 		this->position.y = std::fmodf(this->position.y + mapSize.y, mapSize.y);
 	}
-
-	const float MAX_SPEED = 15;
 }
