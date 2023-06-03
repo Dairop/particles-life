@@ -38,7 +38,7 @@ void display(const sf::Vector2f& sizeEnv, const std::vector<particle>& particles
 	for (const particle& p: particles){
 		cs.setFillColor(sf::Color::Black);
 		cs.setPosition(
-			add(mult(add(p.getPosition(), camPos), zoom), sf::Vector2f(windowWidth / 2, windowHeight / 2))
+			add(mult(add(sub(p.getPosition(), sf::Vector2f(10.0f, 10.0f)), camPos), zoom), sf::Vector2f(windowWidth / 2, windowHeight / 2))
 		);
 		cs.setFillColor(p.getColor());
 

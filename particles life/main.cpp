@@ -5,7 +5,11 @@
 extern sf::Vector2f SIZE_ENV;
 extern std::vector<particle> particles;
 
+
+
 int main() {
+	srand(time(nullptr));
+
 	initEngine();
 	initDisplay(SIZE_ENV);
 

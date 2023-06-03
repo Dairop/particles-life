@@ -2,8 +2,6 @@
 
 
 
-
-
 sf::Vector2f add(const sf::Vector2f a, const sf::Vector2f b)
 {
     return sf::Vector2f(a.x + b.x, a.y + b.y);
@@ -53,6 +51,20 @@ float dist2(const sf::Vector2f p1, const sf::Vector2f p2) {
 
 float dist(const sf::Vector2f p1, const sf::Vector2f p2) {
     return sqrt(dist2(p1, p2));
+}
+
+
+float distOnThorus(const sf::Vector2f envSize, const sf::Vector2f p1, const sf::Vector2f p2) {
+    float dx = std::abs(p2.x - p1.x);
+    float dy = std::abs(p2.y - p1.y);
+ 
+    if (dx > envSize.x / 2.0f)
+        dx = envSize.x - dx;
+ 
+    if (dy > envSize.y / 2.0f)
+        dy = envSize.y - dy;
+ 
+    return std::sqrt(dx*dx + dy*dy);
 }
 
 
