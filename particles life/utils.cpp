@@ -2,8 +2,6 @@
 
 
 
-
-
 sf::Vector2f add(const sf::Vector2f a, const sf::Vector2f b)
 {
     return sf::Vector2f(a.x + b.x, a.y + b.y);
