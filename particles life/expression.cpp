@@ -18,7 +18,7 @@ void expression::updateExpression(const std::vector<std::string> & tokens, unsig
 	std::string token;
 	float depth = 0;
 	float priority;
-	std::string highestToken;
+	std::string highestToken; 
 	float highestDepth = tokens.size()+1;
 	unsigned int highestTokenIndex = 0;
 
