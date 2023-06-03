@@ -29,7 +29,6 @@ void particle::update(sf::Vector2f mapSize, unsigned int type_env) {
 
 	if (type_env == 0) {
 		//rectangle & collisions
-		
 		this->speed.x = (this->position.x < 0) ? std::fabs(this->speed.x): this->speed.x;
 		this->speed.x = (this->position.x > mapSize.x) ? -std::fabs(this->speed.x) : this->speed.x;
 		this->speed.y = (this->position.y < 0) ? std::fabs(this->speed.y) : this->speed.y;
