@@ -8,12 +8,8 @@ class type_particle {
 protected:
 	unsigned int id;
 	sf::Color color;
-<<<<<<< HEAD
-	std::array<float, 5> globalValues = {0.0f,0.0f,0.0f,0.0f,0.0f}; // values between -1 and 1
-	std::shared_ptr<expression> globalFunction;
-=======
 	std::array<float, 5> globalValues = { randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP() }; // values between -1 and 1
-	std::string globalFunction = "";
+	std::shared_ptr<expression> globalFunction;
 
 >>>>>>> 96558e86bc9207b52097cf039c365f430080cbc9
 public:
