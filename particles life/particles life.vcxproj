@@ -78,9 +78,17 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\C++\particles-life\include;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>D:\C++\particles-life\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>D:\C++\particles-life\lib;$(LibraryPath)</LibraryPath>
+    <PublicIncludeDirectories>D:\C++\particles-life\include;$(PublicIncludeDirectories)</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>D:\C++\particles-life\include;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>D:\C++\particles-life\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>D:\C++\particles-life\lib;$(LibraryPath)</LibraryPath>
+    <PublicIncludeDirectories>D:\C++\particles-life\include;$(PublicIncludeDirectories)</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -121,7 +129,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-main-d.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -141,12 +149,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;sfml-main.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="display.cpp" />
     <ClCompile Include="events.cpp" />
+    <ClCompile Include="expression.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="particle.cpp" />
@@ -156,6 +165,7 @@
     <ClInclude Include="display.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="expression.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>

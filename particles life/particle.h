@@ -1,6 +1,6 @@
 #pragma once
 #include "utils.h"
-
+#include "expression.h"
 
 class type_particle;
 
@@ -9,15 +9,15 @@ protected:
 	unsigned int id;
 	sf::Color color;
 	std::array<float, 5> globalValues = { randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP() }; // values between -1 and 1
-	std::string globalFunction = "";
-
+	std::shared_ptr<expression> globalFunction;
 public:
 	type_particle() {
 		id = rand() % RAND_MAX;
 		globalValues = {randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP()};
 		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 1.0f, 1.0f);
 		color = sf::Color(_c.x, _c.y, _c.z);
-
+		globalFunction = std::make_shared<expression>("1.5+&*($1+2*$2)-$0");
+		std::cout << "test : " << globalFunction->applyFunction(2, { 1,2,0,5,-4 }) << std::endl;
 		//generate the function
 	}
 
