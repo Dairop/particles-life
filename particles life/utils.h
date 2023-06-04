@@ -27,6 +27,7 @@ float dist(const sf::Vector2f p1, const sf::Vector2f p2);
 float dist2(const sf::Vector2f p1, const sf::Vector2f p2);
 
 float distOnThorus(const sf::Vector2f envSize, const sf::Vector2f p1, const sf::Vector2f p2);
+float dist2OnThorus(const sf::Vector2f envSize, const sf::Vector2f p1, const sf::Vector2f p2);
 
 // random float between 0 and 1
 float randFloat(); 

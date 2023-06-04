@@ -3,7 +3,10 @@
 
 float type_particle::interactWith(type_particle &t2, float distance) {
 	if (distance < 30.0f) return -5.0f; // collisions
-	float force = 0.15f * (std::sin(t2.globalValues[0] * distance * 0.01f + this->globalValues[3]));
+	//float force = (std::tanh(t2.globalValues[3] + this->globalValues[3]*-0.6f + (t2.globalValues[0] > this->globalValues[1] * -1.3f || distance/100.0f < -t2.globalValues[2])));
+	//float force = (t2.globalValues[0] > this->globalValues[2]) - (t2.globalValues[3] * distance/100.0f < this->globalValues[0]);
+	float force = ((t2.globalValues[1] + this->globalValues[1] > 0.2f) != (t2.globalValues[0] > this->globalValues[2]/2 + sin(distance/50.0f)))*2-1;
+
 	if (distance > 130.0f) { //less effective when too far
 		force /= distance/130.0f;
 	}
