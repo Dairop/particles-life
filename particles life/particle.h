@@ -9,22 +9,22 @@ protected:
 	unsigned int id;
 	sf::Color color;
 	std::array<float, 5> globalValues = { randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP() }; // values between -1 and 1
-	std::shared_ptr<expression> globalFunction;
+	std::shared_ptr<expression> _expression;
 public:
 	type_particle() {
 		id = rand() % RAND_MAX;
 		globalValues = {randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP()};
 		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 1.0f, 1.0f);
 		color = sf::Color(_c.x, _c.y, _c.z);
-		globalFunction = std::make_shared<expression>("1.5+&*($1+2*$2)-$0");
-		std::cout << "test : " << globalFunction->applyFunction(2, { 1,2,0,5,-4 }) << std::endl;
+		_expression = std::make_shared<expression>("$0*&*0.1");
+		std::cout << "test : " << _expression->applyFunction(2, { 1,2,0,5,-4 }) << std::endl;
 		//generate the function
 	}
 
 	//returns the norm of the force vector
 	float interactWith(type_particle& t2, float distance);
 	sf::Color getColor() const { return color; }
-
+	std::array<float, 5> & getGlobalValues();
 };
 
 
@@ -51,6 +51,7 @@ public:
 	type_particle* getType() const { return type; }
 
 	sf::Vector2f getPosition() const { return position; }
+	void setPosition(sf::Vector2f& newPos) { position = newPos; }
 	sf::Color getColor() const { return type->getColor(); }
 	void interactWith(sf::Vector2f pos2, type_particle& t2, float distance);
 	void update(sf::Vector2f mapSize, unsigned int type_env);

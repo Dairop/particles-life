@@ -1,15 +1,19 @@
 #include "particle.h"
 
+std::array<float, 5> & type_particle::getGlobalValues() {
+	return globalValues;
+}
 
 float type_particle::interactWith(type_particle &t2, float distance) {
-	if (distance < 30.0f) return -5.0f; // collisions
-	//float force = (std::tanh(t2.globalValues[3] + this->globalValues[3]*-0.6f + (t2.globalValues[0] > this->globalValues[1] * -1.3f || distance/100.0f < -t2.globalValues[2])));
+	////float force = (std::tanh(t2.globalValues[3] + this->globalValues[3]*-0.6f + (t2.globalValues[0] > this->globalValues[1] * -1.3f || distance/100.0f < -t2.globalValues[2])));
 	//float force = (t2.globalValues[0] > this->globalValues[2]) - (t2.globalValues[3] * distance/100.0f < this->globalValues[0]);
-	float force = ((t2.globalValues[1] + this->globalValues[1] > 0.2f) != (t2.globalValues[0] > this->globalValues[2]/2 + sin(distance/50.0f)))*2-1;
+	//float force = ((t2.globalValues[1] + this->globalValues[1] > 0.2f) != (t2.globalValues[0] > this->globalValues[2]/2 + sin(distance/50.0f)))*2-1;
 
+	float force = _expression->applyFunction(distance, t2.getGlobalValues());
 	if (distance > 130.0f) { //less effective when too far
 		force /= distance/130.0f;
 	}
+
 	return force;
 }
 
@@ -20,6 +24,8 @@ void particle::interactWith(sf::Vector2f pos2, type_particle& t2, float distance
 }
 
 void particle::update(sf::Vector2f mapSize, unsigned int type_env) {
+	speed.x += 0;
+	speed.y += 0;
 	this->position = add(this->position, mult(this->speed, 0.1 /*mass*/));
 
 	//resistance

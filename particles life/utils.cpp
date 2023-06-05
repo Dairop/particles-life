@@ -86,7 +86,7 @@ void collideCircles(sf::Vector2f& pos1, sf::Vector2f& pos2, float radius1, float
 
     float distanceToMove = radius1 + radius2 - distanceBetweenCircles;
 
-    //u^date positions
+    //update positions
     pos1.x += cos(angle + 3.141592) * distanceToMove / 2;
     pos1.y += sin(angle + 3.141592) * distanceToMove / 2;
 
