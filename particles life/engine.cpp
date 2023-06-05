@@ -20,7 +20,7 @@ void initEngine(){
 	particles.clear();
 
 	unsigned int number_of_types = 5;
-	unsigned int number_of_particles = 1000;
+	unsigned int number_of_particles = 3500;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
 		typesOfParticles.push_back(type_particle());
