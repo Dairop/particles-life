@@ -8,7 +8,9 @@ extern std::vector<particle> particles;
 
 
 int main() {
-	srand(time(nullptr));
+	int seed = time(nullptr);
+	std::cout << seed << std::endl;
+	srand(seed);
 
 	initEngine();
 	initDisplay(SIZE_ENV);
