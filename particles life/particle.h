@@ -51,6 +51,7 @@ public:
 	type_particle* getType() const { return type; }
 
 	sf::Vector2f getPosition() const { return position; }
+	void setPosition(sf::Vector2f& newPos) { position = newPos; }
 	sf::Color getColor() const { return type->getColor(); }
 	void interactWith(sf::Vector2f pos2, type_particle& t2, float distance);
 	void update(sf::Vector2f mapSize, unsigned int type_env);

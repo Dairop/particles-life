@@ -19,8 +19,8 @@ void initEngine(){
 	typesOfParticles.clear();
 	particles.clear();
 
-	unsigned int number_of_types = 3;
-	unsigned int number_of_particles = 1000;
+	unsigned int number_of_types = 5;
+	unsigned int number_of_particles = 3500;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
 		typesOfParticles.push_back(type_particle());
@@ -49,7 +49,16 @@ void update() {
 			}
 
 			if (dist2Interaction < 40000) { //interaction
-				p1->interactWith(p2->getPosition(), *(p2->getType()), std::sqrt(dist2Interaction));
+				if (dist2Interaction < 20 * 20) { //collision
+					sf::Vector2f pos1 = p1->getPosition();
+					sf::Vector2f pos2 = p2->getPosition();
+					collideCircles(pos1, pos2, 10, 10, dist2Interaction);
+					p1->setPosition(pos1);
+					p2->setPosition(pos2);
+				}
+				else {
+					p1->interactWith(p2->getPosition(), *(p2->getType()), std::sqrt(dist2Interaction));
+				}
 			}
 		}
 

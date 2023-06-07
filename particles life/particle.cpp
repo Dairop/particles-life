@@ -5,8 +5,7 @@ std::array<float, 5> & type_particle::getGlobalValues() {
 }
 
 float type_particle::interactWith(type_particle &t2, float distance) {
-	if (distance < 30.0f) return -5.0f; // collisions
-	//float force = (std::tanh(t2.globalValues[3] + this->globalValues[3]*-0.6f + (t2.globalValues[0] > this->globalValues[1] * -1.3f || distance/100.0f < -t2.globalValues[2])));
+	////float force = (std::tanh(t2.globalValues[3] + this->globalValues[3]*-0.6f + (t2.globalValues[0] > this->globalValues[1] * -1.3f || distance/100.0f < -t2.globalValues[2])));
 	//float force = (t2.globalValues[0] > this->globalValues[2]) - (t2.globalValues[3] * distance/100.0f < this->globalValues[0]);
 	//float force = ((t2.globalValues[1] + this->globalValues[1] > 0.2f) != (t2.globalValues[0] > this->globalValues[2]/2 + sin(distance/50.0f)))*2-1;
 
