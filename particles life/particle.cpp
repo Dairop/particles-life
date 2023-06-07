@@ -11,7 +11,7 @@ float type_particle::interactWith(type_particle &t2, float distance) {
 
 	float force = _expression->applyFunction(distance, t2.getGlobalValues());
 	if (distance > 130.0f) { //less effective when too far
-		force /= distance/130.0f;
+		//force /= distance/130.0f;
 	}
 
 	return force;

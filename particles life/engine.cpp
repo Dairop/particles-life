@@ -20,7 +20,7 @@ void initEngine(){
 	particles.clear();
 
 	unsigned int number_of_types = 5;
-	unsigned int number_of_particles = 3500;
+	unsigned int number_of_particles = 1500;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
 		typesOfParticles.push_back(type_particle());
@@ -63,6 +63,29 @@ void update() {
 		}
 
 		particles[i].update(SIZE_ENV, type_env);
+	}
+
+	for (unsigned int n = 0; n < 8; n++) {
+		for (unsigned int i = 0; i < particles.size(); i++) {
+			for (unsigned int j = i; j < particles.size(); j++) {
+				if (i == j) continue;
+				particle* p1 = &particles[i];
+				particle* p2 = &particles[j];
+
+
+				float dist2Interaction = 100000;
+				if (type_env == 0) {
+					dist2Interaction = dist2(p1->getPosition(), p2->getPosition());
+				}
+				if (dist2Interaction < 20 * 20) { //collision
+					sf::Vector2f pos1 = p1->getPosition();
+					sf::Vector2f pos2 = p2->getPosition();
+					collideCircles(pos1, pos2, 10, 10, dist2Interaction);
+					p1->setPosition(pos1);
+					p2->setPosition(pos2);
+				}
+			}
+		}
 	}
 }
 
