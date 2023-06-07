@@ -6,7 +6,7 @@
 #include <string>
 
 class expression {
-	enum class expression_type { CONSTANT, VARIABLE, DISTANCE, ADDITION, SUBSTRACTION, MULTIPLICATION };
+	enum class expression_type { CONSTANT, VARIABLE, DISTANCE, ADDITION, SUBSTRACTION, MULTIPLICATION, DIVISION };
 	expression_type _type;
 	std::vector<std::shared_ptr<expression>> _children;
 	float _constValue;

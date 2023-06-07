@@ -11,6 +11,7 @@ float operatorPriority(const std::string& op) { // some operators are treated be
 	if (op == "+") return 0.3;
 	if (op == "-") return 0.3;
 	if (op == "*") return 0.6;
+	if (op == "/") return 0.6;
 }
 
 void expression::updateExpression(const std::vector<std::string> & tokens, unsigned int start, unsigned int end) { // this recursive function finds the less priority operator if it exists and creates a new node into the tree
@@ -27,7 +28,7 @@ void expression::updateExpression(const std::vector<std::string> & tokens, unsig
 		token = tokens.at(i);
 		if (token == "(") depth++;
 		else if (token == ")") depth--;
-		else if (token.size() == 1 && letterIn(token.at(0), { '+', '-', '*' })) {
+		else if (token.size() == 1 && letterIn(token.at(0), { '+', '-', '*', '/'})) {
 			if (operatorPriority(token) + depth <= highestDepth) {
 				highestDepth = operatorPriority(token) + depth;
 				highestToken = token;
@@ -57,6 +58,7 @@ void expression::updateExpression(const std::vector<std::string> & tokens, unsig
 		if (highestToken == "+") _type = expression_type::ADDITION; 
 		else if (highestToken == "-") _type = expression_type::SUBSTRACTION;
 		else if (highestToken == "*") _type = expression_type::MULTIPLICATION;
+		else if (highestToken == "/") _type = expression_type::DIVISION;
 		_children.push_back(std::make_shared<expression>(tokens, start, highestTokenIndex-1));
 		_children.push_back(std::make_shared<expression>(tokens, highestTokenIndex +1, end));
 	}
@@ -74,7 +76,7 @@ void expression::updateExpression(const std::string& representation) { // cut a 
 				tokens.push_back(word);
 				word.clear();
 			}
-			if (letterIn(letter, { '(', ')', '+', '-', '*', '&'})) tokens.push_back(std::string(1, letter));
+			if (letterIn(letter, { '(', ')', '+', '-', '*', '/', '&'})) tokens.push_back(std::string(1, letter));
 		}
 	}
 	if (!word.empty()) tokens.push_back(word);
@@ -96,4 +98,10 @@ float expression::applyFunction(float dist, const std::array<float, 5> & paramet
 	else if (_type == expression_type::ADDITION) return _children.at(0)->applyFunction(dist, parameters) + _children.at(1)->applyFunction(dist, parameters);
 	else if (_type == expression_type::SUBSTRACTION) return _children.at(0)->applyFunction(dist, parameters) - _children.at(1)->applyFunction(dist, parameters);
 	else if (_type == expression_type::MULTIPLICATION) return _children.at(0)->applyFunction(dist, parameters) * _children.at(1)->applyFunction(dist, parameters);
+	else if (_type == expression_type::DIVISION) {
+		float a = _children.at(0)->applyFunction(dist, parameters);
+		float b = _children.at(1)->applyFunction(dist, parameters);
+		if (b == 0) return a;
+		return a/b ;
+	}
 }

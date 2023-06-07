@@ -16,7 +16,7 @@ public:
 		globalValues = {randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP()};
 		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 1.0f, 1.0f);
 		color = sf::Color(_c.x, _c.y, _c.z);
-		_expression = std::make_shared<expression>("0.01*&*($1+2*$2-3*$3)");
+		_expression = std::make_shared<expression>("0-500/(&*&)+20/&");
 		std::cout << "test : " << _expression->applyFunction(2, { 1,2,0,5,-4 }) << std::endl;
 		//generate the function
 	}

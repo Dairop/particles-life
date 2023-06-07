@@ -2,7 +2,7 @@
 
 
 
-sf::Vector2f SIZE_ENV = sf::Vector2f(700, 1800); //Taille environnement 
+sf::Vector2f SIZE_ENV = sf::Vector2f(1800, 1800); //Taille environnement 
 std::vector <type_particle> typesOfParticles;
 std::vector <particle> particles;
 /*
