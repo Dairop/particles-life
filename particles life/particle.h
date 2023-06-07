@@ -17,10 +17,15 @@ public:
 		globalValues = {randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP()};
 		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 1.0f, 1.0f);
 		color = sf::Color(_c.x, _c.y, _c.z);
+<<<<<<< HEAD
 		std::ifstream file("../expression.txt");
 		std::string line;
 		std::getline(file, line);
 		_expression = std::make_shared<expression>(line);
+=======
+		_expression = std::make_shared<expression>("0.01*(2-(&*0.02*(($1+$0) * 0.5)))");
+		std::cout << "test : " << _expression->applyFunction(2, { 1,2,0,5,-4 }) << std::endl;
+>>>>>>> c05d318f4d3c834f5895e7315bf5f6d1a020d971
 		//generate the function
 	}
 
