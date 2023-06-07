@@ -2,7 +2,7 @@
 
 
 
-sf::Vector2f SIZE_ENV = sf::Vector2f(1800, 1800); //Taille environnement 
+sf::Vector2f SIZE_ENV = sf::Vector2f(2000, 2000); //Taille environnement 
 std::vector <type_particle> typesOfParticles;
 std::vector <particle> particles;
 /*
@@ -20,7 +20,7 @@ void initEngine(){
 	particles.clear();
 
 	unsigned int number_of_types = 5;
-	unsigned int number_of_particles = 3500;
+	unsigned int number_of_particles = 1000;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
 		typesOfParticles.push_back(type_particle());
