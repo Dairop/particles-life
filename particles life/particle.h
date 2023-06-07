@@ -1,6 +1,7 @@
 #pragma once
 #include "utils.h"
 #include "expression.h"
+#include <fstream>
 
 class type_particle;
 
@@ -16,8 +17,10 @@ public:
 		globalValues = {randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP()};
 		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 1.0f, 1.0f);
 		color = sf::Color(_c.x, _c.y, _c.z);
-		_expression = std::make_shared<expression>("15/&-50/(&*&)");
-		std::cout << "test : " << _expression->applyFunction(2, { 1,2,0,5,-4 }) << std::endl;
+		std::ifstream file("../expression.txt");
+		std::string line;
+		std::getline(file, line);
+		_expression = std::make_shared<expression>(line);
 		//generate the function
 	}
 

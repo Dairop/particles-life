@@ -9,7 +9,7 @@ extern std::vector<particle> particles;
 
 int main() {
 	int seed = time(nullptr);
-	std::cout << seed << std::endl;
+	std::cout << "seed : "<<seed << std::endl;
 	srand(seed);
 
 	initEngine();
