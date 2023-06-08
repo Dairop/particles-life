@@ -7,9 +7,21 @@ bool letterIn(char letter, std::vector<char> letters) { // this function checks 
 	return false;
 }
 
+bool tokenIn(std::string token, std::vector<std::string> tokens) { // this function checks if a char is present in a set of chars
+	for (unsigned int i = 0; i < tokens.size(); i++) {
+		if (token == tokens.at(i)) return true;
+	}
+	return false;
+}
+
 float operatorPriority(const std::string& op) { // some operators are treated before others, thanks to this function
-	if (op == "+") return 0.3;
-	if (op == "-") return 0.3;
+	if (op == "sin") return 0.2;
+	if (op == "cos") return 0.2;
+	if (op == "tan") return 0.2;
+	if (op == "tanh") return 0.2;
+	if (op == "sqrt") return 0.2;
+	if (op == "+") return 0.4;
+	if (op == "-") return 0.4;
 	if (op == "*") return 0.6;
 	if (op == "/") return 0.6;
 }
@@ -28,7 +40,7 @@ void expression::updateExpression(const std::vector<std::string> & tokens, unsig
 		token = tokens.at(i);
 		if (token == "(") depth++;
 		else if (token == ")") depth--;
-		else if (token.size() == 1 && letterIn(token.at(0), { '+', '-', '*', '/'})) {
+		else if (tokenIn(token, { "+", "-", "*", "/", "sin", "cos", "tan", "tanh", "sqrt"})) {
 			if (operatorPriority(token) + depth <= highestDepth) {
 				highestDepth = operatorPriority(token) + depth;
 				highestToken = token;
@@ -59,7 +71,12 @@ void expression::updateExpression(const std::vector<std::string> & tokens, unsig
 		else if (highestToken == "-") _type = expression_type::SUBSTRACTION;
 		else if (highestToken == "*") _type = expression_type::MULTIPLICATION;
 		else if (highestToken == "/") _type = expression_type::DIVISION;
-		_children.push_back(std::make_shared<expression>(tokens, start, highestTokenIndex-1));
+		else if (highestToken == "sin") _type = expression_type::SIN;
+		else if (highestToken == "cos") _type = expression_type::COS;
+		else if (highestToken == "tan") _type = expression_type::TAN;
+		else if (highestToken == "tanh") _type = expression_type::TANH;
+		else if (highestToken == "sqrt") _type = expression_type::SQRT;
+		if (highestTokenIndex > start) _children.push_back(std::make_shared<expression>(tokens, start, highestTokenIndex-1));
 		_children.push_back(std::make_shared<expression>(tokens, highestTokenIndex +1, end));
 	}
 }
@@ -70,13 +87,13 @@ void expression::updateExpression(const std::string& representation) { // cut a 
 	char letter;
 	for (unsigned int i = 0; i < representation.size(); i++) {
 		letter = representation.at(i);
-		if (letterIn(letter, {'0','1','2','3','4','5','6','7','8','9','.', '$'})) word += letter;
+		if (! letterIn(letter, { '(', ')', '+', '-', '*', '/', '&' })) word += letter;
 		else {
 			if (!word.empty()) {
 				tokens.push_back(word);
 				word.clear();
 			}
-			if (letterIn(letter, { '(', ')', '+', '-', '*', '/', '&'})) tokens.push_back(std::string(1, letter));
+			tokens.push_back(std::string(1, letter));
 		}
 	}
 	if (!word.empty()) tokens.push_back(word);
@@ -96,12 +113,20 @@ float expression::applyFunction(float dist, const std::array<float, 5> & paramet
 	else if (_type == expression_type::CONSTANT) return _constValue;
 	else if (_type == expression_type::DISTANCE) return dist;
 	else if (_type == expression_type::ADDITION) return _children.at(0)->applyFunction(dist, parameters) + _children.at(1)->applyFunction(dist, parameters);
-	else if (_type == expression_type::SUBSTRACTION) return _children.at(0)->applyFunction(dist, parameters) - _children.at(1)->applyFunction(dist, parameters);
+	else if (_type == expression_type::SUBSTRACTION) {
+		if (_children.size() == 1) return -_children.at(0)->applyFunction(dist, parameters);
+		return _children.at(0)->applyFunction(dist, parameters) - _children.at(1)->applyFunction(dist, parameters);
+	}
 	else if (_type == expression_type::MULTIPLICATION) return _children.at(0)->applyFunction(dist, parameters) * _children.at(1)->applyFunction(dist, parameters);
 	else if (_type == expression_type::DIVISION) {
 		float a = _children.at(0)->applyFunction(dist, parameters);
 		float b = _children.at(1)->applyFunction(dist, parameters);
 		if (b == 0) return a;
-		return a/b ;
+		return a / b;
 	}
+	else if (_type == expression_type::SIN) return sin(_children.at(0)->applyFunction(dist, parameters));
+	else if (_type == expression_type::COS) return cos(_children.at(0)->applyFunction(dist, parameters));
+	else if (_type == expression_type::TAN) return tan(_children.at(0)->applyFunction(dist, parameters));
+	else if (_type == expression_type::TANH) return tanh(_children.at(0)->applyFunction(dist, parameters));
+	else if (_type == expression_type::SQRT) return sqrt(abs(_children.at(0)->applyFunction(dist, parameters)));
 }
