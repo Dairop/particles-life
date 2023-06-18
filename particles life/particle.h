@@ -18,9 +18,9 @@ public:
 		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 1.0f, 1.0f);
 		color = sf::Color(_c.x, _c.y, _c.z);
 		std::ifstream file("../expression.txt");
-		std::string line;
-		std::getline(file, line);
-		_expression = std::make_shared<expression>(line);
+		std::string line, text;
+		while (std::getline(file, line)) text += line;
+		_expression = std::make_shared<expression>(text);
 		//generate the function
 	}
 
