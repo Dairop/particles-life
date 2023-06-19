@@ -29,7 +29,7 @@ void particle::update(sf::Vector2f mapSize, unsigned int type_env) {
 	this->position = add(this->position, mult(this->speed, 0.1 /*mass*/));
 
 	//resistance
-	float k = -60 * 3.14159 * 0.0091 /*fluid's viscosity*/ * 0.0015 /*particle's radius*/;
+	float k = -60 * 3.14159 * 0.00Pt91 /*fluid's viscosity*/ * 0.0015 /*particle's radius*/;
 	float d = dist(sf::Vector2f(0, 0), this->speed);
 	sf::Vector2f fluid_resistance = mult(mult(this->speed, 1 / (d + 0.0001)), k * d*d);
 	//std::cout << fluid_resistance.x << " " << fluid_resistance.y << "    ";
