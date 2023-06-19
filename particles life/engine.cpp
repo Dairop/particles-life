@@ -2,9 +2,13 @@
 
 
 
-sf::Vector2f SIZE_ENV = sf::Vector2f(1800, 1800); //Taille environnement 
+sf::Vector2f SIZE_ENV = sf::Vector2f(3800, 3800); //Taille environnement 
 std::vector <type_particle> typesOfParticles;
-std::vector <particle> particles;
+
+quadtree* mainQuadTree;
+
+//std::vector <particle> particles;
+
 /*
 Types of environments:
 	0: rectangle with collisions
@@ -17,29 +21,49 @@ unsigned int type_env = 0;
 
 void initEngine(){
 	typesOfParticles.clear();
-	particles.clear();
+
+	if (mainQuadTree != nullptr) mainQuadTree->del();
+	// le rayon du quadtree est un peu plus grand que l'environnement afin de ne pas oublier les particules
+	// qui sont exactement sur le bord
+	RectByCenter rectQ(mult(SIZE_ENV, 0.5), mult(SIZE_ENV, 0.501));
+	mainQuadTree = new quadtree(rectQ);
 
 	unsigned int number_of_types = 5;
-	unsigned int number_of_particles = 1500;
+	unsigned int number_of_particles = 5000;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
 		typesOfParticles.push_back(type_particle());
 	}
 
 	for (unsigned int i = 0; i < number_of_particles; i++) {
-		particles.push_back(particle(SIZE_ENV, &typesOfParticles[rand()%number_of_types]));
+		particle* p = new particle(SIZE_ENV, &typesOfParticles[rand() % number_of_types]);
+		mainQuadTree->insert(p);
 	}
 }
 
 void update() {
-	//non-optimized interactions
-	for (unsigned int i = 0; i < particles.size(); i++) {
-		for (unsigned int j = 0; j < particles.size(); j++) {
-			if (i == j) continue;
-			particle* p1 = &particles[i];
-			particle* p2 = &particles[j];
+	RectByCenter range(sf::Vector2f(0, 0), sf::Vector2f(100.0f, 100.0f)); //query pos and radius
+	std::vector<particle*> queryResult;
+	std::vector<particle*> vectAllParticles;
+	mainQuadTree->getAllParticles(vectAllParticles);
 
+	for (unsigned int i = 0; i < vectAllParticles.size(); i++) {
+		particle* p1 = vectAllParticles.at(i);
 
+		//update query position
+		range.center = vectAllParticles.at(i)->getPosition();
+		//request
+		queryResult.clear();
+		mainQuadTree->queryRangeCircle(range, queryResult);
+
+		//interact with every other particle
+		for (unsigned int j = 0; j < queryResult.size(); j++) {
+			particle* p2 = queryResult[j];
+
+			if (p1->getPosition() == p2->getPosition()) continue;
+
+			
+			//calculate dist squared 
 			float dist2Interaction = 100000;
 			if (type_env == 0) {
 				dist2Interaction = dist2(p1->getPosition(), p2->getPosition());
@@ -48,44 +72,31 @@ void update() {
 				dist2Interaction = dist2OnThorus(SIZE_ENV, p1->getPosition(), p2->getPosition());
 			}
 
-			if (dist2Interaction < 40000) { //interaction
-				if (dist2Interaction < 20 * 20) { //collision
+			//std::cout << dist2Interaction << " ";
+			if (dist2Interaction < 40000) { // if close
+				if (dist2Interaction < 20*20) { //collision
 					sf::Vector2f pos1 = p1->getPosition();
 					sf::Vector2f pos2 = p2->getPosition();
 					collideCircles(pos1, pos2, 10, 10, dist2Interaction);
 					p1->setPosition(pos1);
 					p2->setPosition(pos2);
+
+					p1->interactWith(p2->getPosition(), *(p2->getType()), 20);
+
 				}
-				else {
+				else { // then interact
 					p1->interactWith(p2->getPosition(), *(p2->getType()), std::sqrt(dist2Interaction));
 				}
 			}
 		}
-
-		particles[i].update(SIZE_ENV, type_env);
 	}
 
-	for (unsigned int n = 0; n < 8; n++) {
-		for (unsigned int i = 0; i < particles.size(); i++) {
-			for (unsigned int j = i; j < particles.size(); j++) {
-				if (i == j) continue;
-				particle* p1 = &particles[i];
-				particle* p2 = &particles[j];
 
-
-				float dist2Interaction = 100000;
-				if (type_env == 0) {
-					dist2Interaction = dist2(p1->getPosition(), p2->getPosition());
-				}
-				if (dist2Interaction < 20 * 20) { //collision
-					sf::Vector2f pos1 = p1->getPosition();
-					sf::Vector2f pos2 = p2->getPosition();
-					collideCircles(pos1, pos2, 10, 10, dist2Interaction);
-					p1->setPosition(pos1);
-					p2->setPosition(pos2);
-				}
-			}
-		}
+	mainQuadTree->del();
+	for (unsigned int i = 0; i < vectAllParticles.size(); i++) {
+		particle* p1 = vectAllParticles.at(i);
+		p1->update(SIZE_ENV, type_env);
+		mainQuadTree->insert(p1);
 	}
 }
 

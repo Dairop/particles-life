@@ -20,7 +20,7 @@ void initDisplay(const sf::Vector2f& sizeEnv) {
 
 
 
-void display(const sf::Vector2f& sizeEnv, const std::vector<particle>& particles) { // les données à affichées sont passées par référence en paramètre dans cette fonction depuis le main 
+void display(const sf::Vector2f& sizeEnv, quadtree* mainQuadTree) { // les données à affichées sont passées par référence en paramètre dans cette fonction depuis le main 
 	window.clear(sf::Color(255, 135, 135));
 	
 	sf::RectangleShape map;
@@ -35,12 +35,16 @@ void display(const sf::Vector2f& sizeEnv, const std::vector<particle>& particles
 	//particles
 	sf::CircleShape cs;
 	cs.setRadius(10.0f*zoom);
-	for (const particle& p: particles){
+	
+	std::vector<particle*> vectParticles;
+	mainQuadTree->getAllParticles(vectParticles);
+	
+	for (const particle* p: vectParticles){
 		cs.setFillColor(sf::Color::Black);
 		cs.setPosition(
-			add(mult(add(sub(p.getPosition(), sf::Vector2f(10.0f, 10.0f)), camPos), zoom), sf::Vector2f(windowWidth / 2, windowHeight / 2))
+			add(mult(add(sub(p->getPosition(), sf::Vector2f(10.0f, 10.0f)), camPos), zoom), sf::Vector2f(windowWidth / 2, windowHeight / 2))
 		);
-		cs.setFillColor(p.getColor());
+		cs.setFillColor(p->getColor());
 
 		window.draw(cs);
 	}

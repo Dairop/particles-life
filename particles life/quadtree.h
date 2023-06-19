@@ -1,0 +1,59 @@
+#pragma once
+#include "utils.h"
+#include "particle.h"
+
+
+class particle;
+
+
+class RectByCenter
+{
+public:
+	sf::Vector2f center; sf::Vector2f radius;
+	RectByCenter() {
+		center = sf::Vector2f(0, 0);
+		radius = sf::Vector2f(1, 1);
+	}
+
+	RectByCenter(sf::Vector2f c, sf::Vector2f r) {
+		center = c;
+		radius = r;
+	}
+};
+
+
+class quadtree
+{
+public:
+	// Enfants/*
+	quadtree* northWest;
+	quadtree* northEast;
+	quadtree* southWest;
+	quadtree* southEast;
+
+	// Constante arbitraire indiquant combien d'éléments peuvent être stockés dans ce nœud de quadtree
+	const int QT_NODE_CAPACITY = 5;
+
+
+	// Zone de délimitation alignée sur l'axe (représentée par sa demi-dimension et son centre)
+	// représentant les limites de ce quadtree
+	RectByCenter boundary;
+
+	// Points de ce nœeud de quadtree
+	std::vector <particle*> points;
+
+
+	// Méthodes
+	quadtree(RectByCenter bd) { this->boundary = bd; points.clear(); };
+
+	bool insert(particle* p);
+	void getAllParticles(std::vector<particle*>& particles);
+	void subdivide(); // créer quatre enfants permettant de diviser ce quadrant en quatre quadrants d'égales dimensions
+	void queryRangeRect(RectByCenter range, std::vector<particle*>& pointsInRange);
+	void queryRangeCircle(RectByCenter range, std::vector<particle*>& pointsInRange);
+	void display(sf::RenderWindow& window);
+	void del();  // delete the QuadTree from the actual pos. to the leafs
+
+};
+
+

@@ -3,7 +3,7 @@
 #include "events.h"
 
 extern sf::Vector2f SIZE_ENV;
-extern std::vector<particle> particles;
+extern quadtree* mainQuadTree;
 
 
 
@@ -18,7 +18,7 @@ int main() {
 	while (true) {
 		updateEvents();
 		update();
-		display(SIZE_ENV, particles);
+		display(SIZE_ENV, mainQuadTree);
 	}
 
 	return 0;
