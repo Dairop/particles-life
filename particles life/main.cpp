@@ -9,7 +9,7 @@ extern quadtree* mainQuadTree;
 
 int main() {
 	int seed = time(nullptr);
-	std::cout << seed << std::endl;
+	std::cout << "seed : "<<seed << std::endl;
 	srand(seed);
 
 	initEngine();
