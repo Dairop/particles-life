@@ -16,6 +16,10 @@ unsigned int type_env = 0;
 
 
 void initEngine(){
+	int seed = time(nullptr);
+	std::cout << "seed : " << seed << std::endl;
+	srand(seed);
+
 	typesOfParticles.clear();
 	particles.clear();
 

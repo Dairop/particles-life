@@ -38,7 +38,6 @@ float operatorPriority(const std::string& op) { // some operators are treated be
 }
 
 float valueInInterval(float a, float b, float cursor) {
-	//std::cout << "interval" <<cursor<<", " << a + (b - a) * cursor << std::endl;
 	return a+(b-a)*cursor;
 }
 
