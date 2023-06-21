@@ -15,7 +15,7 @@ public:
 	type_particle() {
 		id = rand() % RAND_MAX;
 		globalValues = {randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP()};
-		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 1.0f, 1.0f);
+		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 0.7+randFloat()*0.3, 0.7+ randFloat()*0.3);
 		color = sf::Color(_c.x, _c.y, _c.z);
 		std::ifstream file("../expression.txt");
 		std::string line, text;

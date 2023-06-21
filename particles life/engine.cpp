@@ -2,7 +2,7 @@
 
 
 
-sf::Vector2f SIZE_ENV = sf::Vector2f(4000, 4000); //Taille environnement 
+sf::Vector2f SIZE_ENV = sf::Vector2f(5000, 5000); //Taille environnement 
 std::vector <type_particle> typesOfParticles;
 std::vector<particle*> vectAllParticles;
 
@@ -44,7 +44,7 @@ void initEngine(){
 	RectByCenter rectQ(mult(SIZE_ENV, 0.5), mult(SIZE_ENV, 0.501));
 	mainQuadTree = new quadtree(rectQ);
 
-	unsigned int number_of_types = 6;
+	unsigned int number_of_types = 12;
 	unsigned int number_of_particles = 5000;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
