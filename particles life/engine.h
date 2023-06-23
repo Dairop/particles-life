@@ -3,6 +3,7 @@
 #include "quadtree.h"
 //#include "particle.h"
 
+extern std::vector<particle*> vectAllParticles;
 
 void initEngine();
 

@@ -4,7 +4,7 @@
 
 extern sf::Vector2f SIZE_ENV;
 extern quadtree* mainQuadTree;
-
+extern std::vector<particle*> vectAllParticles;
 
 
 int main() {
@@ -14,7 +14,7 @@ int main() {
 	while (true) {
 		updateEvents();
 		update();
-		display(SIZE_ENV, mainQuadTree);
+		display(SIZE_ENV, vectAllParticles);
 	}
 
 	return 0;

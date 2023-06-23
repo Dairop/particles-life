@@ -44,7 +44,7 @@ void initEngine(){
 	RectByCenter rectQ(mult(SIZE_ENV, 0.5), mult(SIZE_ENV, 0.501));
 	mainQuadTree = new quadtree(rectQ);
 
-	unsigned int number_of_types = 12;
+	unsigned int number_of_types = 5;
 	unsigned int number_of_particles = 5000;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
@@ -59,7 +59,7 @@ void initEngine(){
 }
 
 void update() {
-	RectByCenter range(sf::Vector2f(0, 0), sf::Vector2f(100.0f, 100.0f)); //query pos and radius
+	RectByCenter range(sf::Vector2f(0, 0), sf::Vector2f(200.0f, 200.0f)); //query pos and radius
 	std::vector<particle*> queryResult;
 
 	//update forces

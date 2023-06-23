@@ -13,5 +13,5 @@ extern sf::Vector2f camPos;
 
 void initDisplay(const sf::Vector2f& sizeEnv);
 
-void display(const sf::Vector2f& sizeEnv, quadtree* mainQuadTree);
+void display(const sf::Vector2f& sizeEnv, std::vector<particle*> vectParticles);
 
