@@ -161,34 +161,41 @@ void expression::updateExpression(const std::vector<std::string> & tokens, unsig
 	std::string token;
 	float depth = 0;
 	float priority;
-	std::string highestToken; 
-	float highestDepth = tokens.size()+1;
-	unsigned int highestTokenIndex = 0;
+	std::string lowestToken;
+	float lowestDepth = tokens.size()+1;
+	unsigned int lowestTokenIndex = 0;
 	std::vector<unsigned int> commas;
 	float commasDepth = 0;
 	bool commasCollection = false;
+	int firstTokenIndex = -1;
 
-	// we search the highest operator here
+	// we search the lowest operator here
 	for (unsigned int i = start; i <= end; i++) {
 		token = tokens.at(i);
 		if (token == "(") depth++;
-		else if (token == ")") depth--;
+		else if (token == ")") {
+			depth--;
+			if (depth < commasDepth) commasCollection = false;
+		}
 		else if (token == ",") {
 			if (commasCollection && depth == commasDepth) commas.push_back(i);
-		} else if (tokenIn(token, { "+", "-", "*", "/", "sin", "cos", "tan", "tanh", "sqrt", "rand", "nrand", "pow", "abs"})) {
-			if (operatorPriority(token) + depth <= highestDepth) {
-				highestDepth = operatorPriority(token) + depth;
-				highestToken = token;
-				highestTokenIndex = i;
-				commas.clear();
-				commasCollection = (i<tokens.size()-1 && tokens.at(i+1)=="(");
-				commasDepth = depth + 1;
+		} else {
+			if (firstTokenIndex == -1) firstTokenIndex = i;
+			if (tokenIn(token, { "+", "-", "*", "/", "sin", "cos", "tan", "tanh", "sqrt", "rand", "nrand", "pow", "abs" })) {
+				if (operatorPriority(token) + depth <= lowestDepth) {
+					lowestDepth = operatorPriority(token) + depth;
+					lowestToken = token;
+					lowestTokenIndex = i;
+					commas.clear();
+					commasDepth = depth + 1;
+					commasCollection = (i < tokens.size() - 1 && tokens.at(i + 1) == "(");					
+				}
 			}
 		}
 	}
 
-	// if no highest operator is found, the expression takes the value
-	if (highestToken.empty()) {
+	// if no lowest operator is found, the expression takes the value
+	if (lowestToken.empty()) {
 		for (unsigned int i = start; i <= end; i++) {
 			token = tokens.at(i);
 			if (token != "(") {
@@ -205,10 +212,10 @@ void expression::updateExpression(const std::vector<std::string> & tokens, unsig
 				break;
 			}
 		}
-	} else {// if a highest operator is found, we create children for the current expression
-		_type = stringToExpressionType(highestToken);		
-		if (highestTokenIndex > start) _children.push_back(std::make_shared<expression>(tokens, start, highestTokenIndex-1));
-		unsigned int lastComma = highestTokenIndex;
+	} else {// if a lowest operator is found, we create children for the current expression
+		_type = stringToExpressionType(lowestToken);		
+		if (firstTokenIndex != -1 && firstTokenIndex < lowestTokenIndex) _children.push_back(std::make_shared<expression>(tokens, start, lowestTokenIndex-1));
+		unsigned int lastComma = lowestTokenIndex;
 		commas.push_back(end+1);
 		for (unsigned int i = 0; i < commas.size(); i++) {
 			_children.push_back(std::make_shared<expression>(tokens, lastComma+1, commas.at(i)-1));
@@ -226,14 +233,14 @@ void expression::updateExpression(const std::string& representation) { // cut a 
 	char letter;
 	for (unsigned int i = 0; i < representation.size(); i++) {
 		letter = representation.at(i);
-		if (! letterIn(letter, { '(', ')', '+', '-', '*', '/', '&', ','})) word += letter;
-		else {
+		if (letterIn(letter, { '(', ')', '+', '-', '*', '/', '&', ',' })) {
 			if (!word.empty()) {
 				tokens.push_back(word);
 				word.clear();
 			}
 			tokens.push_back(std::string(1, letter));
 		}
+		else word += letter;
 	}
 	if (!word.empty()) tokens.push_back(word);
 
@@ -250,27 +257,27 @@ expression::expression(const std::vector<std::string>& tokens, unsigned int star
 
 float expression::applyFunction(float dist, const std::array<float, 5> & parameters) const { //calculate the expression with the given parameters
 	if (_type == expression_type::VARIABLE) return parameters.at(_varIndex);
-	else if (_type == expression_type::CONSTANT) return _constValue;
-	else if (_type == expression_type::DISTANCE) return dist;
-	else if (_type == expression_type::ADDITION) return _children.at(0)->applyFunction(dist, parameters) + _children.at(1)->applyFunction(dist, parameters);
-	else if (_type == expression_type::SUBSTRACTION) {
+	if (_type == expression_type::CONSTANT) return _constValue;
+	if (_type == expression_type::DISTANCE) return dist;
+	if (_type == expression_type::ADDITION) return _children.at(0)->applyFunction(dist, parameters) + _children.at(1)->applyFunction(dist, parameters);
+	if (_type == expression_type::SUBSTRACTION) {
 		if (_children.size() == 1) return -_children.at(0)->applyFunction(dist, parameters);
 		return _children.at(0)->applyFunction(dist, parameters) - _children.at(1)->applyFunction(dist, parameters);
 	}
-	else if (_type == expression_type::MULTIPLICATION) return _children.at(0)->applyFunction(dist, parameters) * _children.at(1)->applyFunction(dist, parameters);
-	else if (_type == expression_type::DIVISION) {
+	if (_type == expression_type::MULTIPLICATION) return _children.at(0)->applyFunction(dist, parameters) * _children.at(1)->applyFunction(dist, parameters);
+	if (_type == expression_type::DIVISION) {
 		float a = _children.at(0)->applyFunction(dist, parameters);
 		float b = _children.at(1)->applyFunction(dist, parameters);
 		if (b == 0) return a;
 		return a / b;
 	}
-	else if (_type == expression_type::SIN) return sin(_children.at(0)->applyFunction(dist, parameters));
-	else if (_type == expression_type::COS) return cos(_children.at(0)->applyFunction(dist, parameters));
-	else if (_type == expression_type::TAN) return tan(_children.at(0)->applyFunction(dist, parameters));
-	else if (_type == expression_type::TANH) return tanh(_children.at(0)->applyFunction(dist, parameters));
-	else if (_type == expression_type::SQRT) return sqrt(abs(_children.at(0)->applyFunction(dist, parameters)));
-	else if (_type == expression_type::RAND) return _children.at(_varIndex)->applyFunction(dist, parameters);
-	else if (_type == expression_type::NRAND) return valueInInterval(_children.at(0)->applyFunction(dist, parameters), _children.at(1)->applyFunction(dist, parameters), _constValue);
-	else if (_type == expression_type::POW) return pow(_children.at(0)->applyFunction(dist, parameters), _children.at(1)->applyFunction(dist, parameters));
-	else if (_type == expression_type::ABS) return abs(_children.at(0)->applyFunction(dist, parameters));
+	if (_type == expression_type::SIN) return sin(_children.at(0)->applyFunction(dist, parameters));
+	if (_type == expression_type::COS) return cos(_children.at(0)->applyFunction(dist, parameters));
+	if (_type == expression_type::TAN) return tan(_children.at(0)->applyFunction(dist, parameters));
+	if (_type == expression_type::TANH) return tanh(_children.at(0)->applyFunction(dist, parameters));
+	if (_type == expression_type::SQRT) return sqrt(abs(_children.at(0)->applyFunction(dist, parameters)));
+	if (_type == expression_type::RAND) return _children.at(_varIndex)->applyFunction(dist, parameters);
+	if (_type == expression_type::NRAND) return valueInInterval(_children.at(0)->applyFunction(dist, parameters), _children.at(1)->applyFunction(dist, parameters), _constValue);
+	if (_type == expression_type::POW) return pow(_children.at(0)->applyFunction(dist, parameters), _children.at(1)->applyFunction(dist, parameters));
+	if (_type == expression_type::ABS) return abs(_children.at(0)->applyFunction(dist, parameters));
 }
