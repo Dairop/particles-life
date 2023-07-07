@@ -19,6 +19,26 @@ bool collideRectAndRect(RectByCenter rect1, RectByCenter rect2) {
     return false;
 }
 
+
+bool collideRectAndRectOnThorus(RectByCenter rect1, RectByCenter rect2, sf::Vector2f envSize) {
+    float dx = std::abs(rect2.center.x - rect1.center.x);
+    float dy = std::abs(rect2.center.y - rect1.center.y);
+
+    //looping
+    if (dx > envSize.x / 2.0f)
+        dx = envSize.x - dx;
+
+    if (dy > envSize.y / 2.0f)
+        dy = envSize.y - dy;
+
+    //check if dx < total-radius in x and same in y
+    return (dx <= rect1.radius.x + rect2.radius.x  &&  dy <= rect1.radius.y + rect2.radius.y);
+}
+
+
+
+
+
 void quadtree::del() {
     points.clear();
     if (northWest != nullptr) {
@@ -99,6 +119,8 @@ void quadtree::subdivide() {
 };
 
 bool quadtree::insert(particle* p) {
+    if (isnan(p->getPosition().x)) return false;
+
     // Insérer un point dans le QuadTree
     // Ignorer les objets qui n'appartiennent pas a ce quadtree
     if ((abs(boundary.center.x - p->getPosition().x) >= boundary.radius.x) || (abs(boundary.center.y - p->getPosition().y) >= boundary.radius.y)) {
@@ -141,7 +163,7 @@ void quadtree::queryRangeRect(RectByCenter range, std::vector<particle*>& points
         return;
     }
 
-    //if not child, return the node points
+    //if no child, return the node points
     if (northWest == nullptr) {
         for (int p = 0; p < points.size(); p++) {
             if ((abs(points.at(p)->getPosition().x - range.center.x) < range.radius.x) &&
@@ -166,7 +188,7 @@ void quadtree::queryRangeCircle(RectByCenter range, std::vector<particle*>& poin
         return;
     }
 
-    //if not child, return the node points
+    //if no child, return the node points
     if (northWest == nullptr) {
         for (int p = 0; p < points.size(); p++) {
             if ((abs(points.at(p)->getPosition().x - range.center.x) < range.radius.x) &&
@@ -189,3 +211,36 @@ void quadtree::queryRangeCircle(RectByCenter range, std::vector<particle*>& poin
     return;
 }
 
+
+
+void quadtree::queryRangeInThorusEnv(RectByCenter range, sf::Vector2f envSize, std::vector<particle*>& pointsInRange) {
+    // skip if the quadtree isn't concerned
+    if (!collideRectAndRectOnThorus(range, boundary, envSize)) {
+        return;
+    }
+
+    //if no child, return the node points
+    if (northWest == nullptr) {
+        float px, py; 
+        sf::Vector2f p_pos;
+        for (int p = 0; p < points.size(); p++) {
+            p_pos = points.at(p)->getPosition();
+            px = p_pos.x; py = p_pos.y;
+
+            if (((abs(px - range.center.x) < range.radius.x) || (abs(px + envSize.x - range.center.x) < range.radius.x) || (abs(px - envSize.x - range.center.x) < range.radius.x))
+                &&
+                ((abs(py - range.center.y) < range.radius.y) || (abs(py + envSize.y - range.center.y) < range.radius.y) || (abs(py - envSize.y - range.center.y) < range.radius.y))) {
+
+                pointsInRange.push_back(points.at(p));
+            }
+        }
+        return;
+    }
+
+    // if it have childs, ask them
+    northWest->queryRangeInThorusEnv(range, envSize, pointsInRange);
+    northEast->queryRangeInThorusEnv(range, envSize, pointsInRange);
+    southEast->queryRangeInThorusEnv(range, envSize, pointsInRange);
+    southWest->queryRangeInThorusEnv(range, envSize, pointsInRange);
+    return;
+}

@@ -19,12 +19,12 @@ Types of environments:
 */
 unsigned int type_env = 0; 
 
-unsigned int ITERATIONS_COLLISIONS = 10;
+unsigned int ITERATIONS_COLLISIONS = 15;
 
 
 void initEngine(){
 	int seed = time(nullptr);
-	std::cout << "seed : " << seed << std::endl;
+	std::cout << "\n\nseed : " << seed << std::endl;
 	srand(seed);
 
 	typesOfParticles.clear();
@@ -41,10 +41,10 @@ void initEngine(){
 
 	// le rayon du quadtree est un peu plus grand que l'environnement afin de ne pas oublier les particules
 	// qui sont exactement sur le bord
-	RectByCenter rectQ(mult(SIZE_ENV, 0.5), mult(SIZE_ENV, 0.501));
+	RectByCenter rectQ(mult(SIZE_ENV, 0.5), mult(SIZE_ENV, 0.51));
 	mainQuadTree = new quadtree(rectQ);
 
-	unsigned int number_of_types = 5;
+	unsigned int number_of_types = 8;
 	unsigned int number_of_particles = 5000;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
@@ -70,7 +70,12 @@ void update() {
 		range.center = vectAllParticles.at(i)->getPosition();
 		//request
 		queryResult.clear();
-		mainQuadTree->queryRangeCircle(range, queryResult);
+		if (type_env == 0 || type_env == 2) {
+			mainQuadTree->queryRangeCircle(range, queryResult);
+		} else if(type_env == 1) { 
+			mainQuadTree->queryRangeInThorusEnv(range, SIZE_ENV, queryResult);
+		}
+
 
 		//interact with every other particle
 		for (unsigned int j = 0; j < queryResult.size(); j++) {
@@ -81,7 +86,7 @@ void update() {
 			
 			//calculate dist squared 
 			float dist2Interaction = 100000;
-			if (type_env == 0) {
+			if (type_env == 0 || type_env == 2) {
 				dist2Interaction = dist2(p1->getPosition(), p2->getPosition());
 			}
 			else if (type_env == 1) {
@@ -105,7 +110,7 @@ void update() {
 
 
 	//resolve superpositions
-	range.radius = sf::Vector2f(20, 20);
+	range.radius = sf::Vector2f(25, 25);
 	for (unsigned int it = 0; it < ITERATIONS_COLLISIONS; it++) { //number of iterations (precision)
 		for (unsigned int i = 0; i < vectAllParticles.size(); i++) {
 			particle* p1 = vectAllParticles.at(i);
@@ -125,7 +130,7 @@ void update() {
 
 				//calculate dist squared 
 				float dist2Interaction = 100000;
-				if (type_env == 0) {
+				if (type_env == 0 ||type_env == 2) {
 					dist2Interaction = dist2(p1->getPosition(), p2->getPosition());
 				}
 				else if (type_env == 1) {
@@ -141,6 +146,13 @@ void update() {
 				}
 			}
 		}
+	}
+
+	//update position
+	mainQuadTree->del();
+	for (unsigned int i = 0; i < vectAllParticles.size(); i++) {
+		particle* p1 = vectAllParticles.at(i);
+		mainQuadTree->insert(p1);
 	}
 }
 

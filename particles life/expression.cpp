@@ -1,5 +1,120 @@
 #include "expression.h"
 
+
+
+std::string generate_rand_str_expression(short int max_depth) { 
+	std::vector<std::string> unary_functions = { "abs", "sin", "sqrt", "tanh", "tan" };
+	std::vector<std::string> two_var_functions = { "nrand", "pow"};
+	std::vector<std::string> n_var_functions = { "rand" };
+
+	std::vector<std::string> unary_operators = { "-" };
+	std::vector<std::string> two_var_operators = { "+", "-", "*", "/" };
+	
+	//some appear multiple times to be chosen more often
+	std::vector<std::string> variables = 
+		{ "$0", "$1", "$2", "$3", "$4", "&", "&*0.1", "&*0.01"
+		  "&*&/40000" , "&*&/40000", "&*&/40000", "&*&/40000" , "&*&/40000", "cos(&*&/40000)",
+		  "1", "1.61803", "2", "2,71828", "3", "3.14159",
+		  "-1", "-1.61803", "-2", "-2.71828", "-3", "-3.14159"
+		};
+
+
+
+	//probability of the type of sub-expression
+	float prob_unary_functions = 0.5f;
+	float prob_two_var_functions = 0.2;
+	float prob_n_var_functions = 0.1;
+	float prob_unary_operators = 0.1;
+	float prob_two_var_operators = 1.9f;
+	float prob_variables = 0.7f;
+
+	float total_probs = prob_unary_functions + prob_two_var_functions + prob_n_var_functions + prob_unary_operators + prob_two_var_operators + prob_variables;
+
+	//don't go above the depth limit (except for the "&*&/40000" variable and some other composed ones)
+	if (max_depth <= 1) {
+		return variables.at(rand() % variables.size());
+	}
+
+	//choose which string we will return
+	float score = randFloat() * total_probs;
+
+
+
+	if (score < prob_unary_functions) {
+		/* eg:  abs( ... )    */
+		return unary_functions.at(rand() % unary_functions.size()) 
+			+ "(" + 
+				generate_rand_str_expression(max_depth-1) 
+			+ ")";
+	} else {
+		score -= prob_unary_functions;
+	}
+
+	if (score < prob_two_var_functions) {
+		/* eg:  nrand( ... , ... )    */
+		return two_var_functions.at(rand() % two_var_functions.size())
+			+ "(" +
+				generate_rand_str_expression(max_depth - 1) + "," + generate_rand_str_expression(max_depth - 1)
+			+ ")";
+	}
+	else {
+		score -= prob_two_var_functions;
+	}
+
+	if (score < prob_n_var_functions) {
+		/* eg:  rand( ... , ... , ..., ... )    */
+		std::string tmp_str = n_var_functions.at(rand() % n_var_functions.size()) + "(";
+
+		const short MAX_NB_OF_PARAMETERS = 6;
+		for (unsigned int i = 0; i < MAX_NB_OF_PARAMETERS - 1; i++) {
+			tmp_str += generate_rand_str_expression(max_depth - 1) + ",";
+		}
+		tmp_str += generate_rand_str_expression(max_depth - 1) + ")";
+
+		return  tmp_str;
+	}
+	else {
+		score -= prob_n_var_functions;
+	}
+
+	if (score < prob_unary_operators) {
+		/* eg:  -...    */
+		return unary_operators.at(rand() % unary_operators.size()) + generate_rand_str_expression(max_depth - 1);
+	}
+	else {
+		score -= prob_unary_operators;
+	}
+
+	if (score < prob_two_var_operators) {
+		/* eg:  ... + ...    */
+		return	generate_rand_str_expression(max_depth - 1) + 
+					two_var_operators.at(rand() % two_var_operators.size()) + 
+				generate_rand_str_expression(max_depth - 1);
+	}
+	else {
+		score -= prob_two_var_operators;
+	}
+
+	if (score < prob_variables) {
+		/* eg:  ... + ...    */
+		return variables.at(rand() % variables.size());
+	}
+	else {
+		score -= prob_variables;
+	}
+
+
+	return ""; // ???
+
+}
+
+
+
+
+
+
+
+
 bool letterIn(char letter, std::vector<char> letters) { // this function checks if a char is present in a set of chars
 	for (unsigned int i = 0; i < letters.size(); i++) {
 		if (letter == letters.at(i)) return true;

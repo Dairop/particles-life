@@ -51,6 +51,7 @@ public:
 	void subdivide(); // créer quatre enfants permettant de diviser ce quadrant en quatre quadrants d'égales dimensions
 	void queryRangeRect(RectByCenter range, std::vector<particle*>& pointsInRange);
 	void queryRangeCircle(RectByCenter range, std::vector<particle*>& pointsInRange);
+	void queryRangeInThorusEnv(RectByCenter range, sf::Vector2f envSize, std::vector<particle*>& pointsInRange);
 	void display(sf::RenderWindow& window);
 	void del();  // delete the QuadTree from the actual pos. to the leafs
 

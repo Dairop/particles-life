@@ -52,4 +52,17 @@ void particle::update(sf::Vector2f mapSize, unsigned int type_env) {
 		this->position.x = std::fmodf(this->position.x + mapSize.x, mapSize.x);
 		this->position.y = std::fmodf(this->position.y + mapSize.y, mapSize.y);
 	}
+	else if (type_env == 2) {
+		//normal box  with gravity
+		this->speed.y += 2.0f;
+
+		this->speed.x = (this->position.x < 0) ? std::fabs(this->speed.x) : this->speed.x;
+		this->speed.x = (this->position.x > mapSize.x) ? -std::fabs(this->speed.x) : this->speed.x;
+		this->speed.y = (this->position.y < 0) ? std::fabs(this->speed.y) : this->speed.y;
+		this->speed.y = (this->position.y > mapSize.y) ? -std::fabs(this->speed.y) : this->speed.y;
+
+
+		this->position.x = std::fmax(0, std::fmin(mapSize.x, this->position.x));
+		this->position.y = std::fmax(0, std::fmin(mapSize.y, this->position.y));
+	}
 }

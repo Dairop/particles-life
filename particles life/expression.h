@@ -1,9 +1,8 @@
 #pragma once
-#include <memory>
-#include <iostream>
-#include <array>
-#include <vector>
-#include <string>
+#include "utils.h"
+
+
+std::string generate_rand_str_expression(short int max_depth);
 
 class expression {
 public:

@@ -17,11 +17,21 @@ public:
 		globalValues = {randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP()};
 		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 0.7+randFloat()*0.3, 0.7+ randFloat()*0.3);
 		color = sf::Color(_c.x, _c.y, _c.z);
-		std::ifstream file("../expression.txt");
-		std::string line, text;
-		while (std::getline(file, line)) text += line;
-		_expression = std::make_shared<expression>(text);
-		//generate the function
+
+		bool loading_from_file = true;
+
+		if (loading_from_file) {
+			std::ifstream file("../expression.txt");
+			std::string line, text;
+			while (std::getline(file, line)) text += line;
+			_expression = std::make_shared<expression>(text);
+		} else {
+			//random expression
+			//std::string expr_str = "tanh(" + generate_rand_str_expression(5) + ")";
+			std::string expr_str = "tanh(sin(&*&/10000 +" + generate_rand_str_expression(2) + ")+" + generate_rand_str_expression(4) + "+cos(" + generate_rand_str_expression(3) + "))";
+			std::cout << expr_str << "\n";
+			_expression = std::make_shared<expression>( expr_str );
+		}
 	}
 
 	//returns the norm of the force vector
@@ -45,6 +55,7 @@ protected:
 public:
 	particle(type_particle* _type): type(_type) {
 		speed = sf::Vector2f(randFloatNP(), randFloatNP());
+		position = sf::Vector2f(randFloat(), randFloat());
 	}
 	particle(sf::Vector2f mapSize, type_particle* _type) : type(_type) {
 		speed = sf::Vector2f(randFloatNP(), randFloatNP());

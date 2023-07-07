@@ -6,7 +6,7 @@
 #include <vector>
 #include <array>
 #include <time.h>
-
+#include <memory>
 
 
 sf::Vector2f add(const sf::Vector2f a, const sf::Vector2f b);
