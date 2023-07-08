@@ -52,7 +52,7 @@ public:
 	void queryRangeRect(RectByCenter range, std::vector<particle*>& pointsInRange);
 	void queryRangeCircle(RectByCenter range, std::vector<particle*>& pointsInRange);
 	void queryRangeInThorusEnv(RectByCenter range, sf::Vector2f envSize, std::vector<particle*>& pointsInRange);
-	void display(sf::RenderWindow& window);
+	void display(sf::RenderWindow& window, sf::Vector2f camPos, float zoom, sf::Vector2f offsetWindow);
 	void del();  // delete the QuadTree from the actual pos. to the leafs
 
 };

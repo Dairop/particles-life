@@ -14,7 +14,7 @@ int main() {
 	while (true) {
 		updateEvents();
 		update();
-		display(SIZE_ENV, vectAllParticles);
+		display(SIZE_ENV, vectAllParticles, *mainQuadTree);
 	}
 
 	return 0;

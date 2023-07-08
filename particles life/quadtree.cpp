@@ -73,26 +73,27 @@ void quadtree::getAllParticles(std::vector<particle*>& particles){
 }
 
 
-void quadtree::display(sf::RenderWindow& window) {
+void quadtree::display(sf::RenderWindow& window, sf::Vector2f camPos, float zoom, sf::Vector2f offsetWindow) {
     sf::RectangleShape rect;
-    rect.setOutlineColor(sf::Color(((int)boundary.center.x * 12663) % 200 + 50, ((int)boundary.center.y * 33851) % 200 + 50, ((int)boundary.radius.x * 9846935) % 200 + 50));
-    rect.setOutlineThickness(4);
+    sf::Vector3f color = HSVtoRGB(float (sf::Uint8 (boundary.center.x/10 + boundary.center.y/10)) * 1.4, 1.0, 1.0);
+    rect.setOutlineColor(sf::Color(color.x, color.y, color.z));
+    rect.setOutlineThickness(1);
     rect.setFillColor(sf::Color(0, 255, 0, 0));
     sf::Vector2f pos;
 
-    pos = sub(boundary.center, boundary.radius);
+    pos = sub(add(boundary.center, camPos), boundary.radius);
 
-    rect.setPosition(pos);
-    rect.setSize(mult(boundary.radius, 2));
+    rect.setPosition(add(mult(pos, zoom), offsetWindow));
+    rect.setSize(mult(boundary.radius, 2*zoom));
     window.draw(rect);
     if (northWest == nullptr) {
         return;
     }
     else {
-        northWest->display(window);
-        northEast->display(window);
-        southEast->display(window);
-        southWest->display(window);
+        northWest->display(window, camPos, zoom, offsetWindow);
+        northEast->display(window, camPos, zoom, offsetWindow);
+        southEast->display(window, camPos, zoom, offsetWindow);
+        southWest->display(window, camPos, zoom, offsetWindow);
         return;
     }
 }
@@ -226,7 +227,7 @@ void quadtree::queryRangeInThorusEnv(RectByCenter range, sf::Vector2f envSize, s
         for (int p = 0; p < points.size(); p++) {
             p_pos = points.at(p)->getPosition();
             px = p_pos.x; py = p_pos.y;
-
+            
             if (((abs(px - range.center.x) < range.radius.x) || (abs(px + envSize.x - range.center.x) < range.radius.x) || (abs(px - envSize.x - range.center.x) < range.radius.x))
                 &&
                 ((abs(py - range.center.y) < range.radius.y) || (abs(py + envSize.y - range.center.y) < range.radius.y) || (abs(py - envSize.y - range.center.y) < range.radius.y))) {

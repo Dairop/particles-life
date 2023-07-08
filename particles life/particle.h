@@ -18,7 +18,7 @@ public:
 		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 0.7+randFloat()*0.3, 0.7+ randFloat()*0.3);
 		color = sf::Color(_c.x, _c.y, _c.z);
 
-		bool loading_from_file = true;
+		bool loading_from_file = false;
 
 		if (loading_from_file) {
 			std::ifstream file("../expression.txt");

@@ -19,7 +19,7 @@ Types of environments:
 */
 unsigned int type_env = 0; 
 
-unsigned int ITERATIONS_COLLISIONS = 15;
+unsigned int ITERATIONS_COLLISIONS = 10;
 
 
 void initEngine(){
@@ -45,11 +45,12 @@ void initEngine(){
 	mainQuadTree = new quadtree(rectQ);
 
 	unsigned int number_of_types = 8;
-	unsigned int number_of_particles = 5000;
+	unsigned int number_of_particles = 4000;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
 		typesOfParticles.push_back(type_particle());
 	}
+
 
 	for (unsigned int i = 0; i < number_of_particles; i++) {
 		particle* p = new particle(SIZE_ENV, &typesOfParticles[rand() % number_of_types]);
@@ -74,6 +75,7 @@ void update() {
 			mainQuadTree->queryRangeCircle(range, queryResult);
 		} else if(type_env == 1) { 
 			mainQuadTree->queryRangeInThorusEnv(range, SIZE_ENV, queryResult);
+			//std::cout << "(" << p1->getPosition().x << ", " << p1->getPosition().y << ") :" << queryResult.size() << "\n";
 		}
 
 
