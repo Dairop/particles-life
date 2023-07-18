@@ -17,7 +17,7 @@ Types of environments:
 	#2: gravity
 	# ...
 */
-unsigned int type_env = 0; 
+unsigned int type_env = 1; 
 
 unsigned int ITERATIONS_COLLISIONS = 10;
 
