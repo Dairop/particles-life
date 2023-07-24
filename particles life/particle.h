@@ -28,7 +28,8 @@ public:
 		} else {
 			//random expression
 			//std::string expr_str = "tanh(" + generate_rand_str_expression(5) + ")";
-			std::string expr_str = "tanh(sin(&*&/10000 +" + generate_rand_str_expression(2) + ")+" + generate_rand_str_expression(4) + "+cos(" + generate_rand_str_expression(3) + "))";
+			//"tanh(sin(&*&/10000 +" + generate_rand_str_expression(2) + ")+" + generate_rand_str_expression(4) + "+cos(" + generate_rand_str_expression(3) + "))";
+			std::string expr_str = generate_rand_str_expression(5, false);
 			std::cout << expr_str << "\n";
 			_expression = std::make_shared<expression>( expr_str );
 		}

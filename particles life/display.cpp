@@ -17,7 +17,7 @@ void initDisplay(const sf::Vector2f& sizeEnv) {
 	zoom = 0.3f;
 	camPos = mult(sizeEnv, -0.5f);
 
-	display_quadtree = true;
+	display_quadtree = false;
 }
 
 

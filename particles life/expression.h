@@ -2,7 +2,7 @@
 #include "utils.h"
 
 
-std::string generate_rand_str_expression(short int max_depth);
+std::string generate_rand_str_expression(short int max_depth, bool prev_was_minus_sign);
 
 class expression {
 public:
