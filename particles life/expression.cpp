@@ -8,12 +8,12 @@ std::string generate_rand_str_expression(short int max_depth, bool prev_was_minu
 	std::vector<std::string> n_var_functions = { "rand" };
 
 	std::vector<std::string> unary_operators = { "-" };
-	std::vector<char> two_var_operators = { '+', '-', '*', '/' };
+	std::vector<char> two_var_operators = { '+', '-', '*', '/'};
 	
 	//some appear multiple times to be chosen more often
 	std::vector<std::string> variables = 
 		{ "$0", "$1", "$2", "$3", "$4", "&", "&*0.1", "&*0.01" ,
-		  "&*&/40000" , "&*&/40000", "&*&/40000", "&*&/40000" , "&*&/40000", "cos(&*&/40000)",
+		  "&*&/40000" , "&*&/40000", "&*&/40000", "&*&/-40000" , "&*&/-40000", "cos(&*&/40000)",
 		  "1", "1.61803", "2", "2,71828", "3", "3.14159",
 		  "-1", "-1.61803", "-2", "-2.71828", "-3", "-3.14159"
 		};
@@ -21,12 +21,12 @@ std::string generate_rand_str_expression(short int max_depth, bool prev_was_minu
 
 
 	//probability of the type of sub-expression
-	float prob_unary_functions = 0.5f;
-	float prob_two_var_functions = 0.2;
-	float prob_n_var_functions = 0.1;
-	float prob_unary_operators = 0.1 * !prev_was_minus_sign;
-	float prob_two_var_operators = 1.9f;
-	float prob_variables = 0.7f;
+	float prob_unary_functions = 0.3f;
+	float prob_two_var_functions = 0.1f;
+	float prob_n_var_functions = 0.05f;
+	float prob_unary_operators = 0.1f * !prev_was_minus_sign;
+	float prob_two_var_operators = 1.5f;
+	float prob_variables = 0.4f;
 
 	float total_probs = prob_unary_functions + prob_two_var_functions + prob_n_var_functions + prob_unary_operators + prob_two_var_operators + prob_variables;
 

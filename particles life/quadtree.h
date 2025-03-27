@@ -32,7 +32,7 @@ public:
 	quadtree* southEast;
 
 	// Constante arbitraire indiquant combien d'éléments peuvent être stockés dans ce nœud de quadtree
-	const int QT_NODE_CAPACITY = 5;
+	const int QT_NODE_CAPACITY = 40;
 
 
 	// Zone de délimitation alignée sur l'axe (représentée par sa demi-dimension et son centre)

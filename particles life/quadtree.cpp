@@ -41,23 +41,26 @@ bool collideRectAndRectOnThorus(RectByCenter rect1, RectByCenter rect2, sf::Vect
 
 void quadtree::del() {
     points.clear();
-    if (northWest != nullptr) {
+    if (northWest) {
         northWest->del();
-        northEast->del();
-        southEast->del();
-        southWest->del();
+        delete northWest;
+        northWest = nullptr;
     }
-    delete northWest;
-    delete northEast;
-    delete southEast;
-    delete southWest;
-
-    northWest = nullptr;
-    northEast = nullptr;
-    southEast = nullptr;
-    southWest = nullptr;
-
-    return;
+    if (northEast) {
+        northEast->del();
+        delete northEast;
+        northEast = nullptr;
+    }
+    if (southWest) {
+        southWest->del();
+        delete southWest;
+        southWest = nullptr;
+    }
+    if (southEast) {
+        southEast->del();
+        delete southEast;
+        southEast = nullptr;
+    }
 }
 
 void quadtree::getAllParticles(std::vector<particle*>& particles){
@@ -119,42 +122,38 @@ void quadtree::subdivide() {
     southWest = new quadtree(r);
 };
 
+
 bool quadtree::insert(particle* p) {
     if (isnan(p->getPosition().x)) return false;
 
-    // Insérer un point dans le QuadTree
-    // Ignorer les objets qui n'appartiennent pas a ce quadtree
-    if ((abs(boundary.center.x - p->getPosition().x) >= boundary.radius.x) || (abs(boundary.center.y - p->getPosition().y) >= boundary.radius.y)) {
-        return false; // l'objet ne doit pas être ajoute
+    if ((abs(boundary.center.x - p->getPosition().x) >= boundary.radius.x) ||
+        (abs(boundary.center.y - p->getPosition().y) >= boundary.radius.y)) {
+        return false;
     }
 
-    // S'il reste de la place dans ce quadtree, y ajouter l'objet
     if (points.size() < QT_NODE_CAPACITY && northWest == nullptr) {
         points.push_back(p);
         return true;
     }
 
-    // Sinon, subdiviser le quadtree, puis ajouter le point au nœud qui l'acceptera
     if (northWest == nullptr) {
         subdivide();
 
-        //distribute the points to the childs
-        for (int pointMoved = 0; pointMoved < points.size(); pointMoved++) {
-            if (northWest->insert(points[pointMoved])) continue;
-            else if (northEast->insert(points[pointMoved])) continue;
-            else if (southWest->insert(points[pointMoved])) continue;
-            else if (southEast->insert(points[pointMoved])) continue;
+        for (size_t i = 0; i < points.size(); i++) {
+            if (northWest->insert(points[i])) continue;
+            if (northEast->insert(points[i])) continue;
+            if (southWest->insert(points[i])) continue;
+            if (southEast->insert(points[i])) continue;
         }
 
         points.clear();
     }
 
-    if (northWest->insert(p)) { return true; }
-    if (northEast->insert(p)) { return true; }
-    if (southWest->insert(p)) { return true; }
-    if (southEast->insert(p)) { return true; }
+    if (northWest->insert(p)) return true;
+    if (northEast->insert(p)) return true;
+    if (southWest->insert(p)) return true;
+    if (southEast->insert(p)) return true;
 
-    // Sinon, le point ne peut etre insere, pour une raison inconnue (cela ne devrait jamais arriver)
     return false;
 }
 

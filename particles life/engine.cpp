@@ -2,7 +2,7 @@
 
 
 
-sf::Vector2f SIZE_ENV = sf::Vector2f(2000, 2000); //Taille environnement 
+sf::Vector2f SIZE_ENV = sf::Vector2f(6000, 4500); //Taille environnement 
 std::vector <type_particle> typesOfParticles;
 std::vector<particle*> vectAllParticles;
 
@@ -19,7 +19,7 @@ Types of environments:
 */
 unsigned int type_env = 0; 
 
-unsigned int ITERATIONS_COLLISIONS = 10;
+unsigned int ITERATIONS_COLLISIONS = 15;
 
 
 void initEngine(){
@@ -44,8 +44,8 @@ void initEngine(){
 	RectByCenter rectQ(mult(SIZE_ENV, 0.5), mult(SIZE_ENV, 0.9));
 	mainQuadTree = new quadtree(rectQ);
 
-	unsigned int number_of_types = 5;
-	unsigned int number_of_particles = 640;
+	unsigned int number_of_types = 17;
+	unsigned int number_of_particles = 5000;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
 		typesOfParticles.push_back(type_particle());
@@ -109,9 +109,8 @@ void update() {
 	//update position relative to forces
 	mainQuadTree->del();
 	for (unsigned int i = 0; i < vectAllParticles.size(); i++) {
-		particle* p1 = vectAllParticles.at(i);
-		p1->update(SIZE_ENV, type_env);
-		mainQuadTree->insert(p1);
+		vectAllParticles[i]->update(SIZE_ENV, type_env);
+		mainQuadTree->insert(vectAllParticles[i]);
 	}
 
 

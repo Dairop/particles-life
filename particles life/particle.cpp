@@ -9,7 +9,14 @@ float type_particle::interactWith(type_particle &t2, float distance) {
 	//float force = (t2.globalValues[0] > this->globalValues[2]) - (t2.globalValues[3] * distance/100.0f < this->globalValues[0]);
 	//float force = ((t2.globalValues[1] + this->globalValues[1] > 0.2f) != (t2.globalValues[0] > this->globalValues[2]/2 + sin(distance/50.0f)))*2-1;
 
+	const float maxSpeed = 0.5f;
 	float force = _expression->applyFunction(distance, t2.getGlobalValues());
+	if (abs(force) > maxSpeed) {
+		force = ((force > 0.0f) ? 1.0f : -1.0f) * maxSpeed + force / 10.0f;
+	}
+
+	force = std::fmin(std::fmax(force, -maxSpeed * 1.1f), maxSpeed * 1.1f);
+
 	if (distance > 130.0f) { //less effective when too far
 		//force /= distance/130.0f;
 	}
