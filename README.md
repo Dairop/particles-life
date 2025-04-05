@@ -6,5 +6,5 @@
 cd build
 cmake ..
 make
-./GameOfLife
+./particlesLife
 ```
