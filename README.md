@@ -1,5 +1,10 @@
-# particles-life
+## particles-life
 
-Exécution du main.cpp dans VS
+#### Compile and execute the project with the following commands :
 
-Parametrer SFML comme d'habitude (j'ai inclus tout SFML mais on pourrait enlever quelques parties plus tard comme le network ou le son).
+```
+cd build
+cmake ..
+make
+./GameOfLife
+```
