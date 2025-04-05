@@ -2,7 +2,6 @@
 #include "utils.h"
 #include "quadtree.h"
 
-
 extern unsigned int windowWidth;
 extern unsigned int windowHeight;
 extern sf::RenderWindow window;

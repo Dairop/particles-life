@@ -1,4 +1,5 @@
 #include "particle.h"
+#include <cmath>
 
 std::array<float, 5> & type_particle::getGlobalValues() {
 	return globalValues;
@@ -56,8 +57,8 @@ void particle::update(sf::Vector2f mapSize, unsigned int type_env) {
 	}
 	else if (type_env == 1) {
 		//thorus space, we add mapSize because the fmodf function can't work with negative numbers
-		this->position.x = std::fmodf(this->position.x + mapSize.x, mapSize.x);
-		this->position.y = std::fmodf(this->position.y + mapSize.y, mapSize.y);
+		this->position.x = fmodf(this->position.x + mapSize.x, mapSize.x);
+		this->position.y = fmodf(this->position.y + mapSize.y, mapSize.y);
 	}
 	else if (type_env == 2) {
 		//normal box  with gravity

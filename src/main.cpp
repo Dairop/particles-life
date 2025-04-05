@@ -8,14 +8,14 @@ extern std::vector<particle*> vectAllParticles;
 
 
 int main() {
-	initEngine();
+	initEngine(time(nullptr));
 	initDisplay(SIZE_ENV);
+
 
 	while (true) {
 		updateEvents();
 		update();
 		display(SIZE_ENV, vectAllParticles, *mainQuadTree);
 	}
-
 	return 0;
 }

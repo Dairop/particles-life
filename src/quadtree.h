@@ -31,24 +31,27 @@ public:
 	quadtree* southWest;
 	quadtree* southEast;
 
-	// Constante arbitraire indiquant combien d'éléments peuvent être stockés dans ce nœud de quadtree
+	// Constante arbitraire indiquant combien d'elements peuvent ï¿½tre stockï¿½s dans ce nï¿½ud de quadtree
 	const int QT_NODE_CAPACITY = 40;
 
 
-	// Zone de délimitation alignée sur l'axe (représentée par sa demi-dimension et son centre)
-	// représentant les limites de ce quadtree
+	// Zone de dï¿½limitation alignï¿½e sur l'axe (reprï¿½sentï¿½e par sa demi-dimension et son centre)
+	// reprï¿½sentant les limites de ce quadtree
 	RectByCenter boundary;
 
-	// Points de ce nœeud de quadtree
+	// Points de ce nï¿½eud de quadtree
 	std::vector <particle*> points;
 
 
-	// Méthodes
-	quadtree(RectByCenter bd) { this->boundary = bd; points.clear(); };
+	// Mï¿½thodes
+	quadtree(RectByCenter bd) {
+		this->boundary = bd; points.clear();
+		northWest = nullptr; northEast = nullptr; southWest = nullptr; southEast = nullptr;
+	};
 
 	bool insert(particle* p);
 	void getAllParticles(std::vector<particle*>& particles);
-	void subdivide(); // créer quatre enfants permettant de diviser ce quadrant en quatre quadrants d'égales dimensions
+	void subdivide(); // creer quatre enfants permettant de diviser ce quadrant en quatre quadrants d'ï¿½gales dimensions
 	void queryRangeRect(RectByCenter range, std::vector<particle*>& pointsInRange);
 	void queryRangeCircle(RectByCenter range, std::vector<particle*>& pointsInRange);
 	void queryRangeInThorusEnv(RectByCenter range, sf::Vector2f envSize, std::vector<particle*>& pointsInRange);

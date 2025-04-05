@@ -1,5 +1,5 @@
 #include "expression.h"
-
+#include <cmath>
 
 
 std::string generate_rand_str_expression(short int max_depth, bool prev_was_minus_sign) { 
@@ -144,6 +144,8 @@ expression::expression_type expression::stringToExpressionType(std::string & typ
 	if (type == "nrand") return expression_type::NRAND;
 	if (type == "pow") return expression_type::POW;
 	if (type == "abs") return expression_type::ABS;
+	if (type == "exp") return expression_type::EXP;
+	if (type == "log") return expression_type::LOG;
 }
 
 
@@ -158,6 +160,8 @@ float valueInInterval(float a, float b, float cursor) {
 }
 
 void expression::updateExpression(const std::vector<std::string> & tokens, unsigned int start, unsigned int end) { // this recursive function finds the less priority operator if it exists and creates a new node into the tree
+	this->representation = tokens;
+	this->updated = true;
 	_children.clear();
 	std::string token;
 	float depth = 0;
@@ -182,7 +186,7 @@ void expression::updateExpression(const std::vector<std::string> & tokens, unsig
 			if (commasCollection && depth == commasDepth) commas.push_back(i);
 		} else {
 			if (firstTokenIndex == -1) firstTokenIndex = i;
-			if (tokenIn(token, { "+", "-", "*", "/", "sin", "cos", "tan", "tanh", "sqrt", "rand", "nrand", "pow", "abs" })) {
+			if (tokenIn(token, { "+", "-", "*", "/", "sin", "cos", "tan", "tanh", "sqrt", "rand", "nrand", "pow", "abs", "exp", "log" })) {
 				if (operatorPriority(token) + depth <= lowestDepth) {
 					lowestDepth = operatorPriority(token) + depth;
 					lowestToken = token;
@@ -244,7 +248,6 @@ void expression::updateExpression(const std::string& representation) { // cut a 
 		else word += letter;
 	}
 	if (!word.empty()) tokens.push_back(word);
-
 	updateExpression(tokens, 0, tokens.size()-1);
 }
 
@@ -281,4 +284,6 @@ float expression::applyFunction(float dist, const std::array<float, 5> & paramet
 	if (_type == expression_type::NRAND) return valueInInterval(_children.at(0)->applyFunction(dist, parameters), _children.at(1)->applyFunction(dist, parameters), _constValue);
 	if (_type == expression_type::POW) return pow(_children.at(0)->applyFunction(dist, parameters), _children.at(1)->applyFunction(dist, parameters));
 	if (_type == expression_type::ABS) return abs(_children.at(0)->applyFunction(dist, parameters));
+	if (_type == expression_type::EXP) return exp(_children.at(0)->applyFunction(dist, parameters));
+	if (_type == expression_type::LOG) return log(_children.at(0)->applyFunction(dist, parameters));
 }

@@ -26,6 +26,7 @@ void updateEvents() {
 			if (event.key.code == sf::Keyboard::Down) camPos.y -= 20 / zoom;
 			if (event.key.code == sf::Keyboard::Left) camPos.x += 20 / zoom;
 			if (event.key.code == sf::Keyboard::Right) camPos.x -= 20 / zoom;
+			if (event.key.code == sf::Keyboard::I) initEngine(time(nullptr));
 			if (event.key.code == sf::Keyboard::R) initEngine();
 		}
 

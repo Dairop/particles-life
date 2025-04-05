@@ -1,8 +1,8 @@
 #include "engine.h"
+#include <cmath>
 
 
-
-sf::Vector2f SIZE_ENV = sf::Vector2f(6000, 4500); //Taille environnement 
+sf::Vector2f SIZE_ENV = sf::Vector2f(2000, 2000); //Taille environnement
 std::vector <type_particle> typesOfParticles;
 std::vector<particle*> vectAllParticles;
 
@@ -17,13 +17,14 @@ Types of environments:
 	#2: gravity
 	# ...
 */
-unsigned int type_env = 0; 
+unsigned int type_env = 0;
 
 unsigned int ITERATIONS_COLLISIONS = 15;
 
+int lastSeed = 0;
 
-void initEngine(){
-	int seed = time(nullptr);
+void initEngine(int seed){
+	lastSeed = seed;
 	std::cout << "\n\nseed : " << seed << std::endl;
 	srand(seed);
 
@@ -44,11 +45,11 @@ void initEngine(){
 	RectByCenter rectQ(mult(SIZE_ENV, 0.5), mult(SIZE_ENV, 0.9));
 	mainQuadTree = new quadtree(rectQ);
 
-	unsigned int number_of_types = 17;
-	unsigned int number_of_particles = 5000;
+	unsigned int number_of_types = 3;
+	unsigned int number_of_particles = 500;
 
 	for (unsigned int i = 0; i < number_of_types; i++) {
-		typesOfParticles.push_back(type_particle());
+		typesOfParticles.push_back(type_particle((float) i / number_of_types));
 	}
 
 
@@ -62,6 +63,11 @@ void initEngine(){
 		mainQuadTree->insert(p);
 		vectAllParticles.push_back(p);
 	}
+
+}
+
+void initEngine() {
+	initEngine(lastSeed);
 }
 
 void update() {

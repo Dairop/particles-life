@@ -1,5 +1,5 @@
 #include "utils.h"
-
+#include <cmath>
 
 
 sf::Vector2f add(const sf::Vector2f a, const sf::Vector2f b)
@@ -235,12 +235,12 @@ void coloredStdCout(std::string str, sf::Vector3f color) {
 
 
 std::string rgbToHex(int r, int g, int b) {
-    // convertit des couleurs de (0-255, 0-255, 0-255) à de l'hexadecimal #000FFF
+    // convertit des couleurs de (0-255, 0-255, 0-255) ï¿½ de l'hexadecimal #000FFF
     std::string rHex = "", gHex = "", bHex = "";
     int hexDigit;
 
-    //on convertit chaque couleur à la fois, il suffit de passer d'une valeur en base 10
-    //à deux char en base 16
+    //on convertit chaque couleur ï¿½ la fois, il suffit de passer d'une valeur en base 10
+    //ï¿½ deux char en base 16
 
     hexDigit = (r >> 4) & 0xF;
     rHex += (hexDigit < 10) ? (char)(hexDigit + '0') : (char)(hexDigit - 10 + 'A');

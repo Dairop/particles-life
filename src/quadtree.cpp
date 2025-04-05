@@ -1,5 +1,5 @@
 #include "quadtree.h"
-
+#include <cmath>
 
 
 bool collideRectAndRect(RectByCenter rect1, RectByCenter rect2) {
@@ -124,7 +124,7 @@ void quadtree::subdivide() {
 
 
 bool quadtree::insert(particle* p) {
-    if (isnan(p->getPosition().x)) return false;
+    if (std::isnan(p->getPosition().x)) return false;
 
     if ((abs(boundary.center.x - p->getPosition().x) >= boundary.radius.x) ||
         (abs(boundary.center.y - p->getPosition().y) >= boundary.radius.y)) {
@@ -154,7 +154,7 @@ bool quadtree::insert(particle* p) {
     if (southWest->insert(p)) return true;
     if (southEast->insert(p)) return true;
 
-    return false;
+    return true;
 }
 
 void quadtree::queryRangeRect(RectByCenter range, std::vector<particle*>& pointsInRange) {

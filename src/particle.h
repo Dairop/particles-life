@@ -12,24 +12,25 @@ protected:
 	std::array<float, 5> globalValues = { randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP() }; // values between -1 and 1
 	std::shared_ptr<expression> _expression;
 public:
-	type_particle() {
+	type_particle(float colorAngle) {
 		id = rand() % RAND_MAX;
 		globalValues = {randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP(), randFloatNP()};
-		sf::Vector3f _c = HSVtoRGB(randFloat() * 360.0f, 0.7+randFloat()*0.3, 0.7+ randFloat()*0.3);
+		sf::Vector3f _c = HSVtoRGB(colorAngle * 360.0f, 1, 1);
 		color = sf::Color(_c.x, _c.y, _c.z);
 
-		bool loading_from_file = false;
+		bool loading_from_file = true;
 
 		if (loading_from_file) {
 			std::ifstream file("../expression.txt");
-			std::string line, text;
-			while (std::getline(file, line)) text += line;
-			_expression = std::make_shared<expression>(text);
+			std::string line;
+			std::getline(file, line);
+			_expression = std::make_shared<expression>(line);
 		} else {
 			//random expression
 			//std::string expr_str = "tanh(" + generate_rand_str_expression(5) + ")";
 			//"tanh(sin(&*&/10000 +" + generate_rand_str_expression(2) + ")+" + generate_rand_str_expression(4) + "+cos(" + generate_rand_str_expression(3) + "))";
-			std::string expr_str = generate_rand_str_expression(5, false);
+			//std::string expr_str = generate_rand_str_expression(5, false);
+			std::string expr_str = "tanh($1+&)";
 			std::cout << expr_str << "\n";
 			_expression = std::make_shared<expression>( expr_str );
 		}

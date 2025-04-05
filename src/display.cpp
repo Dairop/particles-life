@@ -22,13 +22,13 @@ void initDisplay(const sf::Vector2f& sizeEnv) {
 
 
 
-void display(const sf::Vector2f& sizeEnv, std::vector<particle*> vectParticles, quadtree& quad) { // les données à affichées sont passées par référence en paramètre dans cette fonction depuis le main 
-	window.clear(sf::Color(255, 135, 135));
+void display(const sf::Vector2f& sizeEnv, std::vector<particle*> vectParticles, quadtree& quad) { // les donnï¿½es ï¿½ affichï¿½es sont passï¿½es par rï¿½fï¿½rence en paramï¿½tre dans cette fonction depuis le main 
+	window.clear(sf::Color(135, 135, 135));
 	
 	sf::RectangleShape map;
 	map.setSize(mult(sizeEnv, zoom));
 
-	map.setFillColor(sf::Color::White);
+	map.setFillColor(sf::Color::Black);
 	map.setPosition(add(mult(camPos, zoom), sf::Vector2f(windowWidth / 2, windowHeight / 2)));
 
 	window.draw(map);
